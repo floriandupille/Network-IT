@@ -1,0 +1,35 @@
+#############################################################################
+### Supervision d'un hôte Ubuntu (Linux) en SNMP ###
+##
+#
+## Installation de l'agent SNMP
+apt-get update
+apt-get install snmpd
+
+## Edition de la configuration de snmpd.conf
+nano /etc/snmp/snmpd.conf -c
+
+## Commenter la ligne agentaddress en IPv6
+# Adapter la seconde comme l'exemple > agentaddress udp:161
+---------------------------------------------------
+#agentaddress  127.0.0.1,[::1]
+agentaddress udp:161
+
+#Modifier la ligne 63
+view   all  included   .1.3.6.1
+
+#Modifier la ligne 71 avec le nom de votre community SNMP et adapter la ligne
+
+rocommunity public default -V all 
+----------------------------------------------------
+
+## Redémarrer le service SNMP
+systemctl restart snmpd.service
+
+## Debug logiciel SNMP (PC Perso)
+# Avant d'ajouter l'équipement sur PRTG, tester sur votre PC en installant 
+# le logiciel SNMP Tester et réaliser un test de connexion SNMP pour 
+# obtenir l'UPTIME (temps de disponibilité) de la VM Linux
+https://www.paessler.com/tools/snmptester
+
+## Test SNMP réussi > Ajouter l'équipement sur PRTG

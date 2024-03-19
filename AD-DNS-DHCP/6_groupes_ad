@@ -1,0 +1,38 @@
+#######################################################################################
+### Groupes AD - Méthode AGDLP ###
+##
+#
+
+# AGDLP = Account.Global group.Domain Local group.Permissions NTFS
+
+# Types de groupe : 
+
+- Groupe de sécurité : 
+
+- Groupe de distribution : mails
+
+# Groupes par défauts : 
+
+- Groupes intégrés (BuiltIn)
+
+- Groupes spéciaux
+
+- Groupes prédéfinis
+
+# Etendues de groupes : 
+
+- Locale : ne concerne que le domaine dans lequel on est inscrit (ne peut pas se rendre dans un répertoire plus haut)
+
+- Globale : peut aller dans tous le répertoire du domaine (peut se déplacer dans les sous-domaines)
+
+- Universelle : de forêt à forêt (permet à deux domaines de deux entreprises de se lier)
+En intégrant cette étendue on se place sur une AGUDLP
+
+# Appliquer la méthode AGDLP pour la gestion de vos ressources:
+- Mettre les utilisateurs membre d'un ou plusieurs des Groupes Globaux
+- Mettre les Groupes Globaux (GG), membre des Groupe Domain Locaux (DL)
+
+Accounts > Global Groups > Local Domain : mesure de sécurité utile pour les audits
+
+https://neptunet.fr/agdlp/
+https://learn.microsoft.com/fr-fr/security/privileged-access-workstations/privileged-access-access-model

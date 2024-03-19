@@ -1,0 +1,96 @@
+########################################################################
+### Instancier un EC2 AWS depuis un Node Central Ubuntu Server Live 22.04.2 ###
+Environnement matériel et réseau
+OS : Ubuntu Server Live 22.04.2
+WAN accessible depuis le réseau de la machine
+
+# Pour initier l'instanciation d'une EC2 AWS depuis un Node Central Ubuntu Server Live, nous avons d'abord besoin de préparer l'environnement en ajoutant quelques composants.
+
+Pré-requis...
+ZIP             = LATEST
+Ansible   >= 7.2
+Python    >= 3.6
+
+sudo apt-get install zip
+sudo apt-get install ansible
+sudo apt-get install python3.6
+
+# Pour l'installation de boto3 et botocore, il vous sera nécessaire d'installer et d'utiliser pip...
+
+PIP              = LATEST
+boto3       >= 1.26.0
+botocore >= 1.29.0
+
+sudo apt-get install pip
+sudo pip install boto3
+sudo pip install botocore
+
+# Puis installer la collection Ansible AWS galaxy...
+
+ansible-galaxy collection install amazon.aws
+
+# Installation et Configuration d'AWS CLI
+Récuperer le paquet d'installation archivé et lancer l'exécutable...
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+
+# Après l'installation du CLI, passez à la configuration de l'environnement AWS...
+
+aws configure
+
+AWS Access Key ID [None]: [YOUR ACCESS KEY]
+AWS Secret Access Key [None]: [YOUR SECRET KEY]
+Default region name [None]: eu-west-3
+Default output format [None]: json
+
+## Création du fichier d'instructions en YAML
+# Pour piloter l'instanciation de l'EC2, nous allons construire un fichier d'instructions en YAML comportant toutes les informations nécessaires à la configuration de notre nouvelle instance EC2...
+
+nano init_EC2.yml
+
+# Remplissez le script [...] suivant:
+
+---
+- name: Lancer une instance EC2 avec la collection AWS
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Lancer une instance EC2
+      community.aws.ec2_instance:
+        name: "[...]_Ansible"
+        key_name: "[...]_Keys"
+        instance_type: "t2.micro"
+        image_id: "[...]"
+        region: "eu-west-3"
+        security_groups:
+          - "[...]"
+        subnet_id: "[...]"
+        wait: yes
+
+
+
+# Enregistrez le contenu dans le nouveau fichier, puis sortez de l'éditeur...
+
+## Lancement du playbook et initation de l'instance EC2
+# Nous allons maintenant lancer le playbook et laisser Ansible créer notre Instance depuis notre fichier de configuration...
+
+ansible-playbook init_EC2.yml (modifié)
+[15:37]
+RESULT:
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+PLAY [Lancer une instance EC2 avec la collection AWS] ************************************************************************************************
+
+TASK [Lancer une instance EC2] ***********************************************************************************************************************[WARNING]: Collection amazon.aws does not support Ansible version 2.10.8
+ok: [localhost]
+
+PLAY RECAP *******************************************************************************************************************************************
+localhost                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+##
+### by KoinKoin

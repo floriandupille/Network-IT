@@ -1,0 +1,30 @@
+########################################################################################################################
+### Serveur DHCP ###
+##
+#
+https://www.it-connect.fr/installer-et-configurer-un-serveur-dhcp-sous-windows-server-2019/
+
+# Rechercher le service "DHCP" dans le menu Démarrer
+
+# Se rendre dans le domaine du serveur > IPv4, faire un clic droit et sélectionner "Nouvelle étendue"
+
+# Nommer l'étendue
+
+# Désigner une adresse IP de début et une de fin ainsi que le masque de sous-réseau
+
+# Ajout d'exclusions et de retard (facultatif) : sert à isoler des plages d'adresses que l'on souhaite réserver *
+
+# Durée du bail : par défaut il est fixé à 8 jours, mais en entreprise on peut considérer que les postes étant redémarré chaque jour, le bail équivaut à une journée de travail soit 7 heures
+
+# Configurer les paramètres DHCP :
+- adresse du Routeur (passerelle par défaut)
+- adresse du serveur DNS (devrait déjà être détectée, il s'agit de l'adresse IP du poste)
+- adresse WINS à ignorer : elle sert à gérer les noms NetBIOS
+
+Veillez à bien vérifier que les adresses entrées soient correctes.
+
+# L'icône IPv4 doit porté une croix verte quand le DHCP est bien activé
+
+Pour vérifier ce paramètre, le Baux d'adresses doit comporter les infos des plages adresses IP disponibles et donner la liste des adresses occupées.
+
+*Conseil : il est préférable d'éviter l'ajout de restrictions ou de réservation d'adresse IP, car cela consomme des ressources tout en rendant des machines avec adresses statiques dépendante d'un service DHCP pour rien.

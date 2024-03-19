@@ -1,0 +1,11 @@
+############################################################################
+### Configurer l'heure de la VM en fonction de la TimeZone Europe/Paris ###
+##
+#
+sudo timedatectl set-timezone Europe/Paris
+
+# Afficher la nouvelle configuration
+timedatectl
+
+
+

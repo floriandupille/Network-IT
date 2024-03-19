@@ -1,0 +1,57 @@
+#####################################################################
+### Déploiement avec CloneZilla ###
+##
+#
+# 1. Préparation d'un serveur Debian 12 :
+    - Deux cartes réseaux NAT
+    - Deux disques durs (partitionner, formater et monter le sdb)
+
+# 2. CD lecteur > DRBL 2.5.1 iso
+# 3. Power On to Firmware 
+#   > Boot
+#   > (+) CD-ROM Device pour le faire remonter en haut de la liste (on priorise le boot sur ce port)
+
+# 4. Save Changes & Reboot
+
+# 5. Au démarrage DRBL > Sélectionner la deuxième option puis Graphic install
+
+# 6. - 2 (Don't touch keymap) 
+#    - 0 (X-windows)
+
+# 7. Clonezilla server > Press Enter
+# 8. Selectionner dhcp > si plusieurs cartes réseaux, sélectionner celle en NAT et refuser la recherche d'un autre réseau
+#    Attendre la fin du compte à rebours de 30s
+#    Attendre le service Nagios pour trouver le réseau
+# 9. Mount Clonezilla image directory > local dev > Press Enter
+# 10. Available disks on this machine (les deux disques doivent apparaitre)
+#     Press Ctrl+C
+# 11. Sélectionner sdb1
+# 12. Sélectionner le dossier créé précédemment associé (/media/image)
+#     Se placer dessus et cliquer sur Tab puis Done
+# 13. Press Enter > "we will continu to run drblpush..." > Press Enter
+# 14. DRBL, developed by NCHC Free Software Labs > All 
+# 15. Clonezilla - OCS > Beginner
+# 16. Start Clonezilla mode > save-disk
+# 17. Now in server
+# 18. Renommer l'image sauvegardée 
+# 19. Quel device sauvé de la machine DISTANTE > sda 
+#     (Linux détecte le premier disque du client comme sda peu importe l'OS)
+# 20. Skip checking/repairing
+# 21. Yes, check the saved image
+# 22. The action to perform when client finishes cloning > choose
+#     (permet de voir au moment du déploiement si une erreur a eu lieu lors de l'install)
+# 22. 2000 (ne pas changer)
+# 23. Message d'avertissement concernant dhcpd.conf (mal configuré),
+#     il veut que les adresses soient réservées en fonction des adresses MAC
+#     Press Enter
+# 24. Garder la fenêtre du terminal ouverte (Clonezilla prêt à l'emploi)
+
+# 25. Démarrer la machine à cloner en Firmware > Boot > Ramener Newtork boot from Intel E1000 en haut de liste
+
+# ATTENTION : pour fonctionner, le sdb doit avoir reçu les droits d'accès
+#             chmod 777 UNE FOIS QUE 
+
+
+
+
+# Passer en AZERTY : setxkbmap fr

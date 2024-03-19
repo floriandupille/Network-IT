@@ -1,0 +1,163 @@
+
+
+###
+## SAM : Security Account Manager
+# https://www.it-connect.fr/a-la-decouverte-de-la-base-sam-de-windows-importance-structure-compromission/
+- composant présent sur chaque machine Windows ou Windows Server
+- responsable de la gestion des comptes d'utilisateurs et de groupes
+- exécutée en arrière-plan au démarrage
+- indépendante du domaine, présente sur chaque machine
+
+Chemin d'accès : %SystemRoot%\system32\config\SAM
+Registre Windows : HKEY_LOCAL_MACHINE\SAM\
+
+Deux domaines dans SAM : 
+- Account : contient les utilisateurs et groupes locaux propres à la machine.
+- Builtin : contient les groupes intégrés à Windows, comme "Administrateurs".
+
+Tip :  SID du compte Administrateur termine toujours par 500 (suffixe commun)
+
+S-1-5-21-1660400566-1867812361-5792324776-500
+
+Utilité : 
+- faire sauter un mdp d'un compte user dans le cas où il est impossible de le retrouver
+- exporter la 
+
+Commandes : 
+- psexec.exe -i -s regedit.exe
+# permet d'ouvrir regedit.exe en tant que SYSTEM et accéder à la base SAM.
+
+- HKEY_LOCAL_MACHINE\SAM\SAM
+# chemin d'accès dans le Registre Windows depuis regedit
+
+- nmap -p139,445 --script smb-enum-users <Adresse IP de la cible
+# l'outil NMAP (inclus nativement dans Kali Linux) intègre un script nommé "smb-enum-users" capable d'énumérer la liste des utilisateurs d'une machine Windows.
+
+- Get-CimInstance win32_useraccount | Format-Table domain,name,sid
+# commande PowerShell pour obtenir le SID d'un compte
+
+...
+
+
+###
+## NTDS : NT Directory Services
+#
+\\C:\Windows\NTDS
+
+Le dossier NTDS est par défaut dans C:\Windows et contient la base de données Active Directory dans le fichier NTDS.dit
+
+# Le service NTDS est le plus important : il a la charge de lire et d’écrire dans la base de données et permet le bon fonctionnement du contrôleur de domaine, s’il n’est pas démarré les utilisateurs ne pourront pas se connecter !
+
+
+###
+## SYSVOL/NETLOGON
+#
+\\C:\Windows\Sysvol
+
+Ce dossier est répliqué sur l’ensemble des contrôleurs de domaine par les services DFSR et contient les stratégies de groupe et le partage NETLOGON.
+
+- domain : ce dossier contient les scripts et stratégie de groupe.
+    - policies : contient les stratégies de groupe du domaine.
+    - scripts : ce dossier permet d’ajouter des scripts qui seront disponibles sur l’ensemble des contrôleurs de domaine. il sert historiquement à stocker les scripts d’ouverture de session que l’on configure dans les attributs de l’objet utilisateur.
+- staging et staging areas : ces dossiers sont utilisés par le système de réplication DFS-R. ce répertoire est utilisé pour créer une file d’attente (queue) des données en attente de réplication à destination des autres contrôleurs de domaine.
+- sysvol : ce dossier est partagé (\\domain\sysvol) et contient un lien symbolique vers le dossier domain pour permettre l’accès aux stratégies de groupes et aux scripts.
+    - dossier "ndomain_name" : on retrouve les même dossiers que dans C:\Windows\SYSVOL\domain.
+        - scripts : depuis cet emplacement, correspond au partage NETLOGON du contrôleur de domaine : \\"domain_name"\netlogon.
+
+\\C:\Windows\Sysvol\sysvol\scripts = \\"domain_name"\netlogon
+
+# Tip : les emplacements physiques de Sysvol et Netlogon peuvent être retrouvés dans :
+Gestionnaire de serveur > Services de fichiers et de stockage > Partages
+
+## Dfs : Espace de noms DFS
+Le service Dfs permet la publication de l’espace de nom \\ma-societe.com\SYSVOL sur le réseau et de le faire pointer sur plusieurs contrôleurs de domaine afin d’assurer la disponibilité.
+
+## DFSR : Réplication DFS
+Le service DFSR assure la réplication du dossier SYSVOL sur l’ensemble des contrôleurs de domaine.
+
+# Sysvol est un dossier contenant les stratégies de groupe et le partage Netlogon.
+# Le service DFSR assure la réplication du dossier SYSVOL sur l’ensemble des contrôleurs de domaine.
+# Le service NETLOGON est essentiel au bon fonctionnement du contrôleur de domaine, ce service gère un canal sécurisé pour l’authentification des utilisateurs et des services. Au démarrage, le service NETLOGON à la charge d’ajouter les enregistrements au serveur DNS afin que le contrôleur de domaine puisse être déclaré.
+
+
+###
+## Kerberos : service d'authentification
+#
+Authentification et gestion des sessions
+
+Le protocole Kerberos est l’acteur principal de l’authentification au sein d’un domaine, il n’intervient ni dans l’annuaire ni dans la résolution de noms.
+Il est aujourd'hui en version 5, i ls'agit d'un protocole mature.
+
+KDC - Centre de distribution des clés Kerberos : intervient dans l’authentification des utilisateurs en gérant les clés.
+    - service d’authentification (Authentication Service – AS) : ce service distribue des tickets spéciaux appelés « TGT » (pour « Ticket-Granting Ticket ») qui permettent d’effectuer d’autres demandes d’accès auprès du service d’émission de tickets (TGS).
+    - service d’émission de tickets (Ticket-Granting Service - TGS) : quand un client veut accéder à un ordinateur, il contacte le service d’émission de tickets correspondant au domaine auquel appartient l’ordinateur, il présente un TGT, et effectue sa demande pour obtenir un ticket d’accès sur cet ordinateur. On parlera alors de l’obtention d’un ticket TGS.
+
+
+###
+## LDAP : LightWeight Access Directory Protocol
+#
+Gestion de l'annuaire
+
+Le protocole LDAP (Lightweight Directory Access Protocol) est un protocole qui permet de gérer des annuaires, notamment grâce à des requêtes d’interrogations et de modification de la base d’informations. L’Active Directory est un annuaire LDAP.
+
+L’identifiant unique d’un objet est appelé GUID qui est « l’identificateur unique global »
+
+Le chemin d'accès d'un objet "utilisateur" se traduira en chemin LDAP par :
+
+cn=Florian,ou=system,ou=informatique,dc=it-connect,dc=local
+
+
+# LDAP, DNS et Kerberos forment le trio de services sans lesquels l'AD ne peut fonctionner.
+
+
+###
+## DN : DistinguishedName
+#
+
+cn=Florian,ou=informatique,dc=wrdn,dc=lab
+
+cn = CommonName
+ou = OrganizationalUnit
+dc = Composant de domaine (Domain component)
+
+sAMAccountName : nom d'ouverture de session (NetBIOS)
+userPrincipalName : nom moderne (DNS)
+
+
+###
+## GUID : Globally Unique Identifier
+#
+
+Un identifiant unique au niveau mondial attribué à divers objets, y compris les utilisateurs et les groupes
+
+
+###
+## SID (Security Identifier) 
+#
+
+Un identifiant unique attribué à chaque compte utilisateur, groupe ou domaine dans les systèmes Windows
+
+
+###
+## NetBIOS 
+#
+
+Un protocole de communication sur les réseaux locaux, souvent utilisé avec les systèmes d'exploitation Windows plus anciens
+
+
+###
+## WDS : Windows Deployment Services
+#
+
+Un service qui permet le déploiement automatisé des systèmes d'exploitation Windows sur les ordinateurs via le réseau
+
+
+###
+## SMB : Server Message Block
+#
+
+Un protocole de partage de fichiers et d'impression largement utilisé dans les réseaux Microsoft, permettant l'accès aux ressources partagées
+
+
+
+Ne pas confondre NTDS, base de données de l'AD, et NTFS, système de fichier de Microsoft !

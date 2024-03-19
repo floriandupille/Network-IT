@@ -1,0 +1,60 @@
+########################################################################################################################
+### Mise en place d'un Active Directory ###
+##
+#
+
+# Changer le nom de l'appareil
+
+# Changer l'adresse IP de la machine
+
+# Sur VMWare Workstation, ne pas oublier de désactiver le DHCP de la VMNet8 pour ne pas entrer en conflit avec le futur DHCP de notre serveur
+
+# Paramètres précédents enregistrés > installer les rôles : 
+- AD DS
+- DNS
+- DHCP
+
+# Une fois la forêt paramétrée, se connecter avec le DNS et non le NetBIOS :
+- Connexion en NetBIOS : 
+
+DOMAIN\user
+
+- Connexion en DNS : 
+
+user@domain.name
+
+
+# Paramétrer le DNS inversé (Type PTR) : 
+- Se rendre dans le service DNS et regarder le dossier "Zone de recherche inversée"
+- Nouvelle zone > paramétrer l'adresse réseau ciblée
+- Rendez-vous dans le dossier du domaine ("wrdn.lab"), sélectionner le fichier hôte du serveur,
+Propriétés et cochez la case "Mettre à jour l'enregistrement de pointeur (PTR) associé"
+- Faites un test nslookup "ip_du_dns"
+https://goopensource.fr/dns-sous-windows-server-2019/
+
+
+# Paramétrage du DHCP : 
+
+Durée du bail : 7h (par bonne pratique)
+
+# Créer un profil qui servira de cible pour la délégation des droits
+
+# Cibler le dossier "Computers" dans l'AD, puis clic droit et "Délégation de contrôle"
+https://richardstk.com/2013/11/29/create-a-dedicated-account-to-join-computers-to-a-domain/#comments
+
+
+# Rentrer le poste dans le domaine :
+ipconfig /all
+ipconfig /release
+ipconfig /renew
+
+
+
+
+
+
+
+Pour tout problème, pensez à consulter le gestionnaire de serveur 
+pour vérifier, puis passer par les Services
+> tapez S pour trouver les services liés au Serveur, puis démarrer
+le service désactivé

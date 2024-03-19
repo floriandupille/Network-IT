@@ -1,0 +1,74 @@
+############################################################################
+### Script Bash - IPTables ###
+##
+# 
+# 
+
+# Changer l'id de la carte réseau ensXXX
+
+nano /root/iptables.sh
+
+-----------------------------------------------------------------
+#!/bin/sh
+
+echo "Flushing iptable rules"
+iptables -F
+iptables -t nat -F
+iptables -t mangle -F
+iptables -X
+
+echo "Enabling loopback"
+# Allow unlimited traffic on loopback
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# Autoriser trafic sortant
+iptables -I OUTPUT -o ens192 -d 0.0.0.0/0 -j ACCEPT
+iptables -I INPUT -i ens192 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+echo "Allowing new and established incoming connections to port 22,80,443,3000, and 9418"
+# Multiport - Allow incoming + outgoing 
+#       SSH (22),
+#       Web Traffic (80, 3000),
+#       Secure Web Traffic (443)
+#       Git (9418)
+iptables -A INPUT -i ens192 -p tcp -m multiport --dports 22,80,443 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o ens192 -p tcp -m multiport --sports 22,80,443 -m state --state ESTABLISHED -j ACCEPT
+
+#echo "Port forwarding from port 3000 to 80"
+# Port Forward to 3000
+#iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3000
+
+#echo "Enabling ICMP (Pings, echos)"
+iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+echo "Preventing DDOS attacks"
+# Prevent DOS Attacks
+iptables -A INPUT -p tcp --dport 80 -m limit --limit 25/minute --limit-burst 100 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -m limit --limit 25/minute --limit-burst 100 -j ACCEPT
+
+
+echo "Enabling logging"
+iptables -N LOGGING
+iptables -A INPUT -j LOGGING
+iptables -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7
+iptables -A LOGGING -j DROP
+
+# Passer les Policy sur DROP
+
+iptables --policy INPUT DROP
+iptables --policy OUTPUT DROP
+iptables --policy FORWARD DROP
+------------------------------------------------------------------------
+
+# Passer la permissions d'execution du script bash
+chmod +x /root/iptables.sh
+
+# Executer un script bash
+./root/iptables.sh
+
+# Vous venez de mettre le minimum de config pour sécuriser un système Linux avec 
+# le firewall IPtables
+####################################################################################
+

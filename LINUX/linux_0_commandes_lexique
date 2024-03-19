@@ -1,0 +1,154 @@
+#####################################################################
+### Répertoires de stockage ###
+##
+/bin = binaries
+# Les exécutables et les commandes 
+/boot = bootstrap 	
+# Fichiers statiques du chargeur d’amorçage (noyaux, images ramdisk, 
+# fichiers de configuration du chargeur d'amorçage…)
+/dev = device 	
+# Fichiers spéciaux des périphériques (hda/hdb, sda/sdb,nvme...)
+/etc = editing text configuration
+# Les fichiers + la config de Linux et des applications
+/home = home directory 	
+# Répertoires personnels des utilisateurs (/home/<username>)
+/lib = library
+# Bibliothèques de routine et le module du kernel (=noyau)
+/media 
+# Points de montages pour les médias amovibles (rom)
+/mnt = mount 	
+# Point de montage pour monter temporairement un système de fichiers
+/opt = optional 	
+# Emplacement pour des applications installées hors gestionnaire de paquets (logiciels optionnels)
+/proc = processus 	
+# Répertoire virtuel pour les informations système (états du noyau et 
+# des processus système)
+/root 	
+# Répertoire personnel du super-utilisateur
+/run = runtime system 	
+# Informations relatives au système depuis son dernier démarrage 
+# (ex : utilisateurs actifs, services en cours d'exécution, etc.)
+/sbin = super binaries
+# Exécutables système essentiels
+/srv = services 	
+# Données pour les services du système
+/tmp = temporary 	
+# Fichiers temporaires des applications
+/usr = unix system resource
+# Les applications utilisateurs. On retrouve presque la même 
+# organisation que sous la racine, mais le contenu est destiné 
+# aux utilisateurs plus qu’au système lui-même.
+    /usr/bin			
+    # Exécutables des programmes additionnels disponibles pour tous les 
+    # utilisateurs (ex : le gestionnaire de fichiers, le lecteur de 
+    # musique, le navigateur Web…)
+    /usr/lib 			
+    # Bibliothèques partagées par les applications additionnelles de 
+    # /usr/bin et /usr/sbin
+    /usr/local			
+    # Emplacement où les utilisateurs doivent installer les 
+    # applications qu'ils compilent.
+    /usr/share			
+    # Fichiers non reliés à l'architecture partagés par les 
+    # applications de /usr/bin et /usr/sbin (ex : les icônes, 
+    # les thèmes, la documentation…)
+/var = variable	
+# Données variables et diverses
+
+
+#####################################################################
+### Ligne de commandes ###
+##
+apt = advanced packaging tool
+#gestionnaire de paquets
+pwd = print working directory
+#affiche le chemin d'accès du répertoire du user
+
+nano
+vim
+vi
+gedit
+#éditeurs de texte ("apt-get install" si non installé)
+
+sudo = substitute user do 
+#élévation de droits
+    su -i = switch user 
+    # se connecter en root
+    sudo -i = sous debian, permet de se connecter à root sans mdp
+clear 
+#nettoie les infos à l'écran
+
+mkdir = make directory
+#créer un dossier
+touch
+#créer un fichier (méthode rapide)
+cat 
+#voir le contenu du fichier sans l'ouvrir
+cd = change directory
+#se placer dans un répertoire
+    cd ..
+    #retour au dossier racine
+ls 
+#liste le contenu du dossier
+    -l = long
+    #liste avec les droits d'accès
+    -al 
+    #liste avec les droits d'accès, y compris les éléments cachés
+    -l | less
+    #permet de naviguer dans la liste manuellement
+mv <dossier> /<chemin_de_destination>
+#déplacer un dossier vers un point de destination
+rm = remove
+    -r 
+    # 
+
+#Dans une commande -cat : 
+> : remplace le contenu du fichier
+>> : écrit à la suite du fichier
+
+
+passwd <username>
+#définir le mot de passe du user
+systemctl 
+#
+    status 
+    #
+
+
+adduser <username> : script pour créer un user
+#créer un user avec un groupe et un mot de passe
+addgroup 
+#créer un groupe sans aucun utilisateur, à utiliser avec sudo
+
+useradd : outil, ligne de commande
+
+
+chown
+#changer le propriétaire d'un élément
+
+chmod 
+#changer les droits d'un élément (proprio/groupe/others)
+
+lsblk = 
+#liste les disques détectés
+
+
+#####################################################################
+### Périphériques ###
+##
+hd… = Harddrive Disk (ancienne technologie IDE)
+sd… = Sata Disk B (serial SCSI)
+sr0 = lecteur cdrom (serial rom)
+
+# The "hd" devices use the generic IDE comands, while the "sd" devices
+# use SCSI commands. SCSI commands can execute in parallel, while IDE 
+# commands don't. 
+
+
+cd /tmp 
+suivi de 
+wget
+tar 
+#permet de télécharger un fichier dans le dossier temporary
+
+ 

@@ -1,0 +1,40 @@
+############################################################################
+### Transférer des fichiers sous Linux avec SCP ###
+##
+# 
+## Secure Copy Protocol
+# (Il sera nécessaire pour transférer la clé SSH vers le poste)
+
+https://www.it-connect.fr/transferer-fichiers-linux-scp-exemples-commandes/
+
+scp <fichier à envoyer> <utilisateur>@<hôte distant>:<dossier cible>
+scp backup.zip user@192.168.130.134:/home/user/
+
+# ou plus court, mais plus abstrait pour préciser le répertoire de l'utilisateur : 
+
+scp backup.zip user@192.168.130.134:~
+
+
+# SCP avec password
+scp "C:\Users\remib\source_du_fichier" root@192.168.1.169:/root
+
+# SCP avec SSH Key
+scp -i "C:\Users\remib\.ssh\clefdeb01"  "C:\Users\remib\source_du_fichier" root@192.168.1.169:/root
+
+# A RETENIR :
+# La copie peut se faire du serveur vers la machine distante : 
+scp /chemin/fichier <user>@<host>:/chemin/fichier
+
+# Ou inversement : 
+scp <user>@<host>:/chemin/fichier /chemin/fichier
+
+
+
+
+SCP - Machine locale à un serveur distant:
+SCP avec password
+scp "C:\Users\remib\source_du_fichier" root@192.168.1.169:/root
+
+
+SCP avec SSH Key
+scp -i "C:\Users\remib\.ssh\clefdeb01"  "C:\Users\remib\source_du_fichier" root@192.168.1.169:/root

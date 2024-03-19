@@ -1,0 +1,19 @@
+############################################################################
+### Editer le fichier de source des paquets > sources.list ###
+##
+#
+## Vérifier la présence des sources des paquets >
+nano /etc/apt/sources.list
+
+## Mettre à jour les sources des paquers APT
+apt-get update
+
+## Tester si vous pouvez rechercher netstat et l'installer
+apt search netstat
+
+apt-get install net-tools
+
+netstat -laputen
+
+
+

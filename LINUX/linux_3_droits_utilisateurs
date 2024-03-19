@@ -1,0 +1,78 @@
+#################################################################################
+### Lecture des droits ###
+##
+#
+# En effectuant une liste des droits : 
+ls -l 
+
+- : fichier
+d : répertoire
+l : library     ->      lien symbolique (accéder au chemin absolu associé à un mot)
+
+rwx 
+#correspond dans l'ordre aux droits de
+- lecture (read)
+- écriture (write)
+- ouverture/entrée (eXecute)
+
+d ... ... ... 
+#les droits attribués à un élément correspondent dans l'ordre aux droits : 
+- du propriétaire (user)
+- du groupe
+- des autres
+
+
+###########################################################################
+### Modification des droits ###
+##
+#
+chown tech:root <dossier>
+#change le propriétaire et le groupe associé à l'élément
+#ici tech et root sont deux comptes exemples, n'importe quel compte 
+#peut être associé
+---------------------> des users sont créés automatiquement à l'installation de certains services (ex : www-data pour apache2), chown va alors être utile pour
+redéfinir les droits de propriété (ex : définir le user/group www-data:www-data comme proprio du dossier :var/www/glpi)
+
+chmod [ugoa][-=+][rwx] <dossier>
+#modifier les droits d'accès 
+- user,group,other,all
+- retirer,...,ajouter
+- droits de lecture, écriture, entrée
+
+chmod 777 <dossier>
+#modifier les droits en octal
+#0 = aucun droit, 1 = droit d'entrée, 5 = droit d'entrée et lecture, 
+#6 = droit de lecture et d'écriture, 7 = tous les droits
+
+(sudo) usermod -aG [group] [user]
+ou 
+gpasswd -a [user] [group]
+#ajouter un user dans un groupe
+
+cat etc/group
+#vérifier la présence du user dans le group modifié
+
+
+
+### Stickybit ###
+##
+# Il s'agit d'un bit d'autorisation qui permet au propriétaire seul 
+# ou à l'utilisateur root de supprimer ou de renommer le fichier
+
+chmod +t <dossier>
+#place le dernier bit en stickybit ("t")
+#pour vérifier, on peut créer un fichier dans le dossier en stickybit puis 
+#se connecter sur un profil autre et tenter de supprimer le fichier
+
+### SUID & SGID ###
+##
+# 
+rw"s"rwxrwx --> bit SUID pour le propriétaire
+rwxrw"s"rwx --> bit SGID pour le groupe 
+- s définit le binaire exécutable
+- S définit le binaire non exécutable 
+
+
+
+
+

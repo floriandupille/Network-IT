@@ -1,0 +1,24 @@
+###########################################################################
+### Sysprep et Mode Out-Of-Box Experience ###
+##
+#
+
+# Qu'est-ce que Sysprep ?
+Sysprep est un programme intégré de Windows pour généraliser une image machine avant son déploiement. La généralisation de l'image supprime les informations spécifiques à l'ordinateur, telles que les pilotes installés et l'identificateur de sécurité (SID).
+
+# Accéder à Sysprep : 
+C:\Windows\System32\Sysprep
+
+Lancer Sysprep propose de redémarrer le poste en entrant en mode OOBE
+
+# L'expérience OOBE 
+
+OOBE est l'expérience prête à l'emploi par défaut qui permet aux utilisateurs finaux d'entrer les informations de leur compte, de sélectionner la langue, d'accepter les conditions d'utilisation de Microsoft et de configurer la mise en réseau.
+
+# Démarrer l'environnement OOBE :
+
+CMD > Sysprep /audit /generalize /shutdown
+
+# Démarrer automatiquement en OOBE : 
+
+Pour configurer Windows afin qu’il démarre sur OOBE, ajoutez Microsoft-Windows-Deployment | Resseal | Mode = paramètre du fichier de réponses oobe.

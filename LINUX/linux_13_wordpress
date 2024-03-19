@@ -1,0 +1,45 @@
+############################################################################
+### Wordpress ###
+##
+# 
+# C'est quoi Wordpress ?
+https://fr.wikipedia.org/wiki/WordPress
+
+
+# Désactiver le service Apache2
+# Nous allons occuper le port :80 avec un conteneur docker Apache2 pour héberger 
+# WordPress, donc opérer un conflit d'écoute sur le port :80
+systemctl stop apache2
+
+# Créer un dossier et se placer dans le dossier
+mkdir /root/wordpress && cd /root/wordpress
+
+# Création de la BDD MariaDB Docker
+docker run -e MYSQL_ROOT_PASSWORD=CHAngE_ME -e MYSQL_DATABASE=wordpress --name wordpressdb -v "$PWD/database":/var/lib/mysql -d mariadb:latest
+
+# Télécharger le conteneur Wordpress
+docker pull wordpress
+
+#Lancer le conteneur Wordpress
+docker run -e WORDPRESS_DB_USER=root -e WORDPRESS_DB_PASSWORD=CHAngE_ME --name wordpress --link wordpressdb:mysql -p 80:80 -v "$PWD/html":/var/www/html -d wordpress
+
+# Lister les conteneurs
+docker ps -a
+
+### Configuration WordPress et Accès console web ###
+# Pour accéder à la console Wordpress >> Depuis le navigateur de votre PC, taper 
+# l'adresse IP de la VM Ubuntu
+ip a 
+# Pour connaître l'IP de votre VM
+
+# Débug
+- Pensez à désactiver vos firewall UFW ou IPtables ou créer les règles nécessaires 
+au fonctionnement de Wordpress + MariaDB dockerisés
+- Quand vous initier la BDD en web GUI pour la première fois, après avoir défini 
+un login et un password, soyez patient pour ne pas la casser ! Le temps que 
+Apache2 demande à PHP d'initier la BDD MariaDB.
+
+En gros ne rafraîchissez pas la page, juste patienter  
+
+Attention également, n'arrêter pas votre VM Ubuntu sans éteindre au préalable les 
+containers Docker 

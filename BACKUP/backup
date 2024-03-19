@@ -1,0 +1,57 @@
+##############################################################################
+### Backup ###
+##
+#
+# Le backup est le processus de copier ou archiver des données importantes pour les protéger en cas de perte, de corruption ou de catastrophe¹.
+# Il existe trois types principaux de backup : la sauvegarde complète, la sauvegarde incrémentielle et la sauvegarde différentielle².
+# La sauvegarde complète consiste à copier tous les fichiers et dossiers d'une source vers une destination. C'est le type de backup le plus simple, mais aussi le plus long et le plus gourmand en espace de stockage².
+# La sauvegarde incrémentielle consiste à copier uniquement les fichiers et dossiers qui ont été modifiés ou ajoutés depuis la dernière sauvegarde, qu'elle soit complète ou incrémentielle. C'est le type de backup le plus rapide et le plus économique en espace de stockage, mais aussi le plus complexe à restaurer, car il faut réappliquer toutes les sauvegardes incrémentielles dans l'ordre chronologique².
+# La sauvegarde différentielle consiste à copier uniquement les fichiers et dossiers qui ont été modifiés ou ajoutés depuis la dernière sauvegarde complète. C'est un compromis entre la sauvegarde complète et la sauvegarde incrémentielle, car elle est plus rapide que la première et plus facile à restaurer que la seconde, mais elle nécessite plus d'espace de stockage que la dernière².
+#
+##
+
+Red Hat Virtualization (RHV)
+
+Matériel : 
+Processeur > Intel XEON (Bronze to Gold)
+             AMD Epyc
+
+Disque dur : 
+SAS (performance, 15k tours/min)
+SATA HDD
+SATA SSD 
+NVME SSD
+
+Formats de disques : vmdk (natif, Vmware), vdi (Virtualbox), vhd ()
+
+
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Choix du matériel : 
+pour le proco > privilégier les coeurs performances (les coeurs effectifs ne sont pas représentatifs)

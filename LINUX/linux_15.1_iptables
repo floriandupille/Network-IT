@@ -1,0 +1,83 @@
+############################################################################
+### IPTables ###
+##
+# 
+# Les trois types de chaînes prédéfinies sont les suivants :
+# - INPUT : Cette chaîne est utilisée pour contrôler le comportement des connexions 
+# entrantes. Exemple : si un utilisateur tente de SSH sur votre PC/serveur, 
+# iptables tentera de faire correspondre l'adresse IP et le port à une règle de la 
+# chaîne d'entrée.
+# - FORWARD : Cette chaîne est utilisée pour les connexions entrantes qui ne sont 
+# pas réellement livrées localement. Pensez à un routeur : les données lui sont 
+# toujours envoyées mais rarement destinées au routeur lui-même; les données sont 
+# simplement transmises à leur cible. À moins que vous ne fassiez une sorte de 
+# routage, de NAT ou quelque chose d'autre sur votre système qui nécessite un 
+# transfert, vous n'utiliserez même pas cette chaîne.
+# - OUTPUT : Cette chaîne est utilisée pour les connexions sortantes. 
+# Exemple : si vous essayez d'envoyer un ping au 8.8.8.8, iptables vérifiera sa 
+# chaîne de sortie pour voir quelles sont les règles concernant le ping et 8.8.8.8 
+# avant de prendre la décision d'autoriser ou de refuser la tentative de connexion.
+# 
+# Etat iptables - réponses spécifiques à la connexion:
+# - ACCEPT - Autorise la connexion.
+# - DROP - Supprimez la connexion, agissez comme si cela ne s'était jamais produit. 
+# C'est mieux si vous ne voulez pas que la source réalise que votre système existe.
+# - REJECT - Ne pas autoriser la connexion, mais renvoyer une erreur. C'est mieux 
+# si vous ne voulez pas qu'une source particulière se connecte à votre système, 
+# mais que vous voulez qu'ils sachent que votre pare-feu les a bloqués.
+#
+##
+
+
+# Désactiver le firewall UFW par défaut
+ufw disable
+
+# Observer les iptables sur un serveur ou client
+iptables -L
+iptables -L -n -v
+# --> se référer à "iptables_états.png"
+
+# Créer une iptables bloquant le ping à destination du 8.8.8.8
+iptables -I OUTPUT -d 8.8.8.8 -j DROP
+
+# Lister les iptables pour les observer
+iptables -L
+
+# Réaliser un test ICMP sortant, il est normalement bloqué
+ping 8.8.8.8
+
+# Pour ne pas perdre l'accès en SSH
+iptables -A INPUT -p tcp --dport ssh -j ACCEPT
+
+# Pour bloquer tout le trafic entrant INPUT, basculer la CHAIN INPUT en DROP
+iptables --policy INPUT DROP
+
+# Essayer de ping google.com ou le 8.8.4.4, le traffic sort mais ne peux plus rentrer.
+SSH est lui toujours accessible.
+
+# Pour reset iptables, repasser vos CHAIN en ACCEPT
+iptables --policy INPUT ACCEPT
+iptables -F # = flush
+
+## Sauvegarde des IPTables
+#
+# Solution 01 - Sauvegarder les iptables - Il faudra les recharger au redémarrage
+sudo /sbin/iptables-save
+/sbin/iptables-save
+
+# Solution 02 - iptables persistent
+apt-get install iptables-persistent
+
+
+
+
+
+https://explainshell.com/
+# Site décrivant la fonction des lignes de commande que l'on cherche à décoder
+
+
+https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
+
+
+
+

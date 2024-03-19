@@ -1,0 +1,21 @@
+############################################################################
+### Docker ###
+##
+# 
+# C'est quoi Docker ?
+https://www.youtube.com/watch?v=caXHwYC3tq8
+
+
+# Install Docker Script
+curl -fsSL https://get.docker.com/ | sh
+
+# Pour les curieux et les personnes concernées par la sécurité, visiter le site 
+# qu'appelle la commande précédente, il s'agit d'un script Bash :
+https://get.docker.com/
+
+# Install Docker Compose
+apt install docker-compose
+
+# Permettre aux autres utilisateurs d'utiliser les commandes docker en l'ajoutant 
+# au groupe docker.
+usermod -aG docker <username>

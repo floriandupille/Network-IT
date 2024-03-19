@@ -1,0 +1,37 @@
+########################################################################################
+### Partage avec permissions NTFS ###
+##
+#
+
+# Permissions NTFS
+- Partage avancé > Cocher "Partager ce dossier" et Autorisations > Supprimer "Tout le monde"
+puis ajouter "Utilisateurs du domaine" en Contrôle total
+- Sécurité > Désactiver l'héritage et supprimer toutes les permissions héritées
+- Sécurité > Ajouter les permissions NTFS des différents groupes en Domaine Local
+- Ne pas oublier d'ajouter le CREATEUR PROPRIETAIRE pour que le créateur d'un fichier 
+puisse le supprimer ou le modifier (supprimer le compte Administrateurs à la fin)
+
+
+Désactiver l'héritage dans le Partage avancé : on n'active jamais l'héritage pour éviter des 
+problèmes de partage si  l'on vient à devoir modifier les droits par la suite
+
+
+
+### Recettage : test depuis le client
+##
+#
+# Premier test : se connecter à un compte du premier groupe en Domaine Local (droit de modification)
+- Connexion au réseau local avec \\srv-ad01\
+- Vérifier qu'il peut entrer dans le dossier partagé 
+- Création d'un fichier dans le dossier partagé
+- Ouverture d'un fichier dans le dossier partagé
+- Modification et sauvegarde du fichier dans le dossier partagé
+- Suppression du fichier dans le dossier partagé
+
+# Second test : se connecter à un compte contenu du second groupe en Domaine Local (droit de lecture seule)
+- Connexion au réseau local avec \\srv-ad01\
+- Vérifier qu'il peut entrer dans le dossier partagé 
+- Création IMPOSSIBLE d'un fichier dans le dossier partagé
+- Ouverture d'un fichier existant
+- Modification et sauvegarde IMPOSSIBLE d'un fichier dans le dossier partagé
+- Suppression IMPOSSIBLE du fichier dans le dossier partagé

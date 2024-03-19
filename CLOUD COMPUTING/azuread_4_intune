@@ -1,0 +1,81 @@
+###################################################################
+### Enrollement automatique d'un End-Devices (Windows) dans Intune ###
+##
+#
+
+!!! Obligatoire !!!
+Permet d'inscrire le devices dans Intune quand on se logue la 1ère fois avec un utilisateurs du tenant AD sur un poste en mode OBDE ou Accès Professionnel
+
+https://cdn.discordapp.com/attachments/1172112280230576150/1186270957971710042/2023-12-18_12h34_45.png?ex=6592a3ec&is=65802eec&hm=83d28a7069e3aeab1067707e08002a537eedc42d5c34e7afed9c73e6fbc7651b&
+
+https://cdn.discordapp.com/attachments/1172112280230576150/1186270958319849493/2023-12-18_12h34_58.png?ex=6592a3ec&is=65802eec&hm=82670f428b4e1f1997b0260a326f683719eb51d0e63b9c6e55e4c9c33fe06267&
+
+
+Concept Autopilot :
+Ce dernier a pour vocation de simplifier et moderniser le déploiement et la gestion des machines Windows 10. Le but est de rendre une machine opérationnelle dès sa sortie du carton sans avoir à effectuer une masterisation avec l’image de l’entreprise.
+
+Ce processus réduit donc un des éléments les plus chronophage et couteux du service Informatique : La Masterisation. Il permet de :
+
+S’affranchir de la gestion d’un master: Avec Windows 10 et le cycle de publication plus fréquent, il devient difficile de faire évoluer le master de l’entreprise.
+S’affranchir de la gestion des drivers : C’est souvent un des éléments les plus consommateur en temps. Les administrateurs doivent valider les drivers des nouveaux modèles ou revalider les drivers des modèles existants lorsqu’une nouvelle version de Windows 10 est publiée. L’utilisation de l’image OEM garantit que les drivers associés, ont été testés par le fabricant.
+D’intégrer de nouveaux modèles plus aisément et de faciliter les approches BYOD/CYOD: Que ce soit pour le BYOD ou des entreprises qui ont un nombre de filiales autonomes importantes, Windows AutoPilot permet plus facilement de gérer ces approches.
+Réduire le temps de mise à disposition en faisant livrer le périphérique directement à l’utilisateur sans avoir à repasser par le service Informatique.
+S’assurer que le périphérique est toujours à jour: Le fabricant OEM qui livre une machine, met à disposition la dernière version de Windows 10.
+
+https://microsofttouch.fr/default/b/js/posts/intune-provisionnement-de-peripheriques-windows-10-avec-windows-autopilot
+
+
+Enrollement Windows Autopilot > Intune
+Pour un déploiement sans intervention manuelle sur les laptops, vous n'avez généralement pas besoin de créer un image (master) personnalisée ou de passer des commandes préalables sur les postes. 
+Cependant, vous pouvez effectuer certaines préparations au niveau des appareils pour optimiser le processus d'enrôlement. 
+
+Voici ce que vous pouvez faire :
+
+Assurez-vous que les laptops sont livrés avec une installation propre de Windows 10 ou 11 Pro ou Edu, sans applications ou configurations personnalisées. Le must est le mode OOBE.
+
+Les laptops doivent être connectés à Internet lors du premier démarrage.
+
+Évitez de configurer des comptes locaux ou des paramètres utilisateur lors du premier démarrage.
+
+Si les laptops disposent d'une carte SIM pour la connectivité cellulaire, assurez-vous qu'elle est activée pour garantir une connexion Internet stable, surtout si le Wi-Fi n'est pas disponible immédiatement.
+
+En utilisant Windows Autopilot, vous pouvez automatiser la plupart des étapes, y compris l'installation d'applications, la configuration des paramètres de sécurité et le déploiement de profils d'entreprise, sans avoir à créer un master personnalisé ni à passer des commandes manuelles sur les postes. C'est l'un des avantages clés de Windows Autopilot pour simplifier le déploiement des appareils Windows.
+
+https://www.youtube.com/watch?v=BHHhgvTAGps
+
+
+Inscription d’appareils Windows
+L’inscription d’appareils Windows dans Microsoft Intune pour la gestion des appareils peut prendre différents chemins. Certains sont pilotés par l’utilisateur, et les administrateurs informatiques en contrôlent d’autres. Certains existent pour prendre en charge les programmes BYOD, et d’autres pour simplifier les scénarios de provisionnement modernes et la gestion des appareils appartenant à l’entreprise. Chaque méthode d’inscription peut afficher des exigences et des comportements d’installation différents. 
+
+Les méthodes suivantes peuvent être utilisées pour mener à bien l’inscription dans Intune :
+Méthode 1 : Ajout d’un compte professionnel ou scolaire
+Méthode 2 : Inscription dans la gestion des appareils uniquement (pilotée par l’utilisateur)
+Méthode 3 : Jonction à Microsoft Entra (OOBE = Out Of Box Experience)
+>>> interface lors de l'install windows pour la connexion à un compte
+Méthode 4 : Jonction à Microsoft Entra (Autopilot - Mode de déploiement piloté par l’utilisateur)
+Méthode 5 : Jonction à Microsoft Entra (mode de déploiement automatique Autopilot)
+Méthode 6 : Inscription dans GPM uniquement (Gestionnaire d’inscription d’appareil)
+Méthode 7 : Cogestion Configuration Manager
+Méthode 8 : Jonction à Microsoft Entra (inscription en bloc)
+
+https://learn.microsoft.com/fr-fr/training/modules/enroll-devices-use-intune/6-enroll-windows-devices-intune
+
+
+# Configurer un profil OOBE : 
+
+Appareils > Inscrire des appareils > Profils de déploiement > Profils Windows AutoPilot Deployment > Créer un profil (PC Windows)
+> Affectations : ajouter tous les appareils ?
+
+Enroller un appareil sur Intune par jonction Azure AD OOBE : 
+après la création du profil OOBE dans Intune, réinitialiser le mot de passe d'un compte Azure AD et entrer le mail de cet utilisateur dans la machine à intégrer (étape du compte à ajouter)
+
+-- Enroller des appareils sur Intune - Méthode 3 : Jonction Azure AD (OOBE)
+OOBE : Out of Box Experience
+
+Enroller votre VM toute fraiche Windows avec un autre compte utilisateur du domaine Azure AD (Changer son mot de passe)
+
+L’appareil est inscrit pendant l’expérience OOBE (Out of Box Experience) et non à partir de l’application Paramètres. L’appareil sera joint à Azure AD en choisissant Configuration pour une organisation et en utilisant un Compte professionnel pour se connecter. Si vous disposez de licences Azure AD Premium et que votre locataire Azure AD est doté de l’inscription automatique pour Intune configurée, votre appareil sera également inscrit dans Intune. Cette méthode est utilisée quand vous avez besoin d’un accès direct à vos utilisateurs et à leurs appareils. Il peut s’agir d’un bureau distant où les appareils sont fournis directement avec Windows préinstallé, généralement une édition Windows Professionnel. L’utilisateur démarre la machine et joint Azure AD pendant l’expérience OOBE. L’appareil est inscrit dans Intune et reçoit les applications et la configuration à partir d’Intune. La version de Windows est généralement élevée à l’édition Windows Entreprise à l’aide d’un paramètre de profil Intune. 
+
+
+# Déployer des installations sur les postes
+

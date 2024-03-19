@@ -1,0 +1,29 @@
+
+# CHANGE IFS. IF NOT CHANGED, BASH INTERPRETER WILL JUMP THE LINE
+# IF THERE IS SPACE.
+# DO NOT CHANGE THIS LINE.
+IFS=$'\n'
+#
+####
+if ! [ -e ./eleves.txt ]; then
+    echo "Fichier ./eleves.txt non trouvé louise"
+    exit
+fi
+####
+read -rp "Voulez-vous importer le fichier ./eleves.txt ? (o/n)" answer
+if [ "$answer" = 'o' ]; then
+    ####
+    while IFS=: read -r login pass commentaire; do
+        #xxxxxxx
+        hashed_pass=$(openssl passwd -6 "$pass")
+        useradd "$login" -m -s /bin/bash -p "$hashed_pass" -c "$commentaire" >/dev/null
+        if [ $? -ne 0 ]; then
+            echo "Une erreur s'est produite lors de l'importation de $login. Supprimer l'utilisateur $login"
+        fi
+    done < ./eleves.txt
+else
+    #xxxxxxxxxxxxxxxx
+    echo "Opération annulée.."
+    exit
+fi
+echo "Opération terminée."

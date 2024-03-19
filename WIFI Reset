@@ -1,0 +1,13 @@
+Sélectionnez Rechercher  dans la barre des tâches, puis tapez invite de commandes. Le bouton Invite de commandes s’affiche. À droite de celui-ci, sélectionnez Exécuter en tant qu'administrateur > Oui.
+
+Dans l’invite de commandes, exécutez les commandes suivantes dans l’ordre où elles apparaissent, puis vérifiez si cela résout le problème de connexion :
+
+Tapez netsh winsock reset et sélectionnez Entrée.
+
+Tapez netsh int ip reset et sélectionnez Entrée.
+
+Tapez ipconfig /release et sélectionnez Entrée.
+
+Tapez ipconfig /renew et sélectionnez Entrée.
+
+Tapez ipconfig /flushdns et sélectionnez Entrée.

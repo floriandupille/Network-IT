@@ -1,0 +1,13 @@
+Entra ID : 
+- accès depuis internet dans le monde entier
+- zero touch config : pas besoin d'accès physique aux infras pour le configurer
+- remote control : le service permet de gérer les déploiements, 
+les installations, mises à jour (WSUS pour Windows)...à distance
+- SSO : connecte sur une interface de connexion au domaine personnalisée
+- permet d'ouvrir toutes les applications liées au compte Azure depuis
+la connexion de démarrage du poste
+- AD FS : Federation Service
+- MFA : demande d'authentification avec Authenticator
+- Intune : permet d'intégrer les appareils dans le domaine pour les manager à distance
+(installation, déploiement, suppression...)
+- 

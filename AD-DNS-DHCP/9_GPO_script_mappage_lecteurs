@@ -1,0 +1,42 @@
+################################################################################################################
+### GPO - Script mappage de lecteurs ###
+##
+#
+
+# Création d'un Groupe Global "GG_ALL" à la racine de l'OU "France"
+Ajout du membre "Utilisateurs du domaine"
+
+# Création des dossiers partagés 
+Partage avancé > Autorisations full aux Utilisateurs du domaine
+Sécurité > GG_ALL en Modification
+
+# Création du script
+
+======================================
+    net use U: \\srv-ad01\Commun
+    net use T: \\srv-ad01\Compta
+    net use O: \\srv-ad01\Direction
+======================================
+
+Enregistrer sous "lecteurs_réseaux.bat"
+
+# Création de la GPO
+Nouvelle GPO "Script de démarrage" à la racine de l'OU "France" 
+
+   Stratégie Script de démarrage 
+    > Configuration utilisateur
+        > Stratégies
+            > Paramètres Windows
+                > Scripts (ouverture/fermeture de session)
+
+Ouverture de session > Ajouter
+Le chemin d'accès des scripts partagés est donné à cet instant.
+Déplacement du script dans le chemin indiqué : 
+
+    \\wrdn.lab\SysVol\wrdn.lab\Policies\{C6C412E1-75A3-4180-A45B-316B050485AB}\User\Scripts\Logon
+
+Ajout du script dans la GPO
+
+# Démarrage d'un compte sur un poste
+
+Au démarrage, les trois lecteurs indiqués dans le script doivent se monter dans la minute suivant le démarrage de la session.

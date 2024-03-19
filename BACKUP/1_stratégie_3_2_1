@@ -1,0 +1,18 @@
+##############################################################################
+### Stratégie 3,2,1 ###
+##
+#
+# La stratégie 3,2,1 est une règle empirique pour assurer la sécurité des données. Elle consiste à avoir au moins trois copies des données, sur deux supports différents, dont un hors site. Par exemple, on peut avoir une sauvegarde complète sur un disque dur externe, une sauvegarde incrémentielle sur un service cloud, et une sauvegarde différentielle sur une clé USB³.
+#
+##
+
+- **3 copies des données :**
+  - L'original et deux copies de sauvegarde.
+
+- **2 supports de stockage différents :**
+  - Utiliser différents types de supports (ex. disque dur externe, cloud).
+
+- **1 copie hors site :**
+  - Garantit la protection en cas de catastrophe locale.
+
+Adopter la stratégie 3-2-1 offre une robustesse supplémentaire face aux pertes de données.

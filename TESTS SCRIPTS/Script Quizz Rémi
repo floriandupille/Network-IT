@@ -1,0 +1,152 @@
+#!/bin/bash
+
+score=0
+num=0
+
+print_separator() {
+    echo -e "**************************************************************************"
+}
+
+ask_question() {
+    num=$((num+1))
+    bonnerep=$1
+    question=$2
+    options=$3
+
+    echo "Question $num"
+    echo ""
+    sleep 1
+    read -p "$question" rep
+
+    if [ "$rep" == "$bonnerep" ]; then
+        score=$(($score+1))
+        echo "Bravo! Votre score est de $score/$num"
+    else
+        echo "Oh non. La bonne réponse était: $bonnerep"
+        echo "Votre score est de $score/$num"
+    fi
+
+    echo -e "Prêt pour la prochaine question? Appuyez sur entrer"
+    read -s presskey
+}
+
+print_separator
+
+echo -e "***                           TSSR OF THE YEAR                         ***"
+
+print_separator
+echo -e "\n"
+sleep 1
+
+read -p "Quel est votre nom? " nom
+echo -e "\n"
+sleep 1
+
+print_separator
+
+ask_question 'f' "Un BIOS peut prendre en charge des disques durs de 4 To (v/f)" ""
+ask_question 'c' "Le A de DORA signifie:
+a) Accept
+b) Ask
+c) Acknowledge
+d) Agreement" ""
+ask_question 'v' "WPA2 est le standard actuel en matière de sécurité Wifi (v/f)" ""
+ask_question 'v' "Un point d'accès Wifi est connecté physiquement au réseau (v/f)" ""
+ask_question 'b' "Que signifie APT?
+a) Acknowledge Packet Transfert
+b) Advanced Packaging Tool
+c) Advanced Package Table
+d) Aptitude" ""
+ask_question 'f' "On parle de 'point à point' lorsque un réseau ne comprend que deux hôtes (v/f)" ""
+ask_question 'bcd' "Quels sont les avantages de la fibre optique (plusieurs réponses):
+a) mobilité
+b) sécurité
+c) portée
+d) résistance aux perturbations électromagnétiques" ""
+ask_question 'abd' "Quels sont les désavantages du Wifi?
+a) portée
+b) résistance aux perturbations électromagnétiques
+c) mobilité
+d) sécurité" ""
+ask_question 'a' "A quoi correspond le bit rate:
+a) vitesse à laquelle les données sont envoyées
+b) vitesse de téléchargement des données
+c) retard avec lequel les données sont reçues
+d) volume maximal de données pouvant être envoyé" ""
+ask_question 'c' "Ethernet, c'est:
+a) une couche du modèle TCP/IP
+b) un LAN non connecté à internet
+c) un protocole
+d) un type de câble réseau" ""
+ask_question 'a' "Le web appartient à la couche:
+a) application
+b) transport
+c) réseau
+d) présentation" ""
+ask_question 'd' "Une adresse IP privée:
+a) commence par 192.168.....
+b) est automatiquement attribuée lorsque le DHCP ne fonctionne pas
+c) est unique dans le WAN
+d) est unique dans le LAN" ""
+ask_question 'c' "Comment s'écrit 28 en binaire:
+a) 10100
+b) 10001
+c) 11100
+d) 11010" ""
+ask_question 'a' "Qu'est-ce que le schéma de l'Active Directory?
+a) Une table qui contient la totalité des classes et attributs
+b) Une table qui contient la totalité des utilisateurs et groupes
+c) Une table qui contient la totalité des GPO
+d) Une table qui contient la totalité des adresses IP" ""
+ask_question 'd' "Combien de bits a une adresse IPV6?
+a) 32 bits
+b) 6 bits
+c) 48 bits
+d) 128 bits" ""
+ask_question 'c' "Quel port utilise FTP?
+a) 25
+b) 23
+c) 21
+d) 24" ""
+ask_question 'd' "Lequel n'est pas un hyperviseur de type 1?
+a) Proxmox
+b) HyperV
+c) Esxi
+d) VMware" ""
+ask_question 'a' "Quelle adresse ci-dessous est une adresse MAC?
+a) 00-50-56-ef-7e-32
+b) 00-50-56-ef-7e-s2
+c) 00-50-56-ef-g2-32
+d) 00-50-56-ef-7e-322" ""
+ask_question 'c' "Quelle est la fonction principale du protocole ICMP?
+a) Résolution de noms
+b) Envoi de messages d'erreur
+c) Routage
+d) Sécurisation des communications" ""
+ask_question 'b' "Quel est le rôle principal du routeur dans un réseau?
+a) Fournir une connexion Wifi
+b) Faciliter le transfert des paquets entre différents réseaux
+c) Assurer la sécurité du réseau
+d) Gérer les adresses IP" ""
+ask_question 'a' "Quelle est la principale différence entre un hub et un commutateur?
+a) Un hub transmet les données à tous les ports, tandis qu'un commutateur transmet les données uniquement au port de destination.
+b) Un commutateur transmet les données à tous les ports, tandis qu'un hub transmet les données uniquement au port de destination.
+c) Un hub est plus rapide qu'un commutateur.
+d) Un commutateur est plus simple qu'un hub." ""
+ask_question 'd' "Quel est le rôle du protocole DNS?
+a) Assurer la sécurité des données
+b) Faciliter la navigation sur internet
+c) Gérer les adresses IP
+d) Convertir les noms de domaine en adresses IP" ""
+ask_question 'b' "Quelle est la principale fonction d'un pare-feu (firewall) dans un réseau informatique?
+a) Fournir une connexion sécurisée
+b) Contrôler et filtrer le trafic réseau
+c) Gérer les adresses IP
+d) Faciliter la communication entre différents réseaux" ""
+
+echo -e "\n"
+print_separator
+echo -e "\n"
+sleep 1
+
+echo "Félicitations, $nom! Votre score final est de $score/$num."

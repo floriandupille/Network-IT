@@ -1,0 +1,66 @@
+###########################################################################
+### Monter un nouveau disque et l'associer à un répertoire ###
+##
+#
+#créer un dossier pour recevoir le nouveau disque
+mkdir -p ./<nom_du_disque>
+#exemple de nom de disque : sdb
+
+#vérifier que le disque a ajouter est bien détecté. Il devrait 
+#apparaitre à la suite sans partition
+lsblk 
+
+#créer la partition du disque
+fdisk /dev/<nom_du_disque>
+
+- Commande : n
+- sélectionner ip par défaut : p
+- numéro de partition : 1
+- Premier secteur : 2048 par défaut
+- Dernier secteur : 20971519 par défaut
+- Commande : w 
+
+#redémarrer puis vérifier la présence de la partition avec lsblk
+
+#formater la partition
+mkfs.ext4 /dev/<nom_de_partition>
+
+#associer le disque à un dossier dans le répertoire media
+mkdir <disk2>
+mount /dev/<nom_de_partition> /media/<disk2>
+#en recherchant ls /media/disk2 l'élément qui apparait devrait être 
+#"lost+found"
+
+#créer un dossier dans le repértoire pour faire un test opérationnel
+mkdir /media/disk2/dossier_test
+
+#le disque doit à présent être configuré pour être reconnu lors d'un reboot : 
+nano /etc/fstab
+
+- Ajouter en fin de fichier : 
+/dev/sdb1 /media/disk2 ext4 defaults,noatime 0 2
+
+#sauvegarder le fichier et redémarrer
+
+#créer un lien symbolique pour faire un raccourci vers le disque
+ln -s /media/disk2 e: #(ici e correspond à la lettre que l'on associe au disque)
+
+ls e:
+#cette commande doit vous afficher les éléments contenu dans le media du disque
+
+#accorder des droits d'accès au disque
+--> voir "linux_3_droits_utilisateurs"
+
+
+####################################################################################
+### Compréhension des disques ###
+##
+#
+# Partitions du disque sda
+
+sda = disque physique
+|-sda1
+|-sda2
+|-sda5 (swap)
+#le SWAP est une mémoire tampon utilisé par la machine lorsque la RAM est surchargée ; 
+#lorsque la mémoire vive est entièrement occupée, c'est le swap qui va prendre le relais pour travailler.

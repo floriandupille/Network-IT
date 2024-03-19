@@ -1,0 +1,10 @@
+#######################################################################################
+### Spanning Tree ###
+##
+#
+
+Permet de déterminer le meilleur chemin à emprunter pour le transfert des paquets sur le réseau.
+
+Fonctionnement : 
+lorsque des paquets vont circuler sur des croisements multiples entre plusieurs switchs, un chemin va être désactivé/bloqué par défaut, il servira alors à la redondance dans le cas où
+le chemin prioritaire est inaccessible (matériel défectueux).

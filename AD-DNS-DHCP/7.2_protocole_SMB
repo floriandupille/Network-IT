@@ -1,0 +1,11 @@
+########################################################################################
+### Protocole SMB ###
+##
+#
+Le protocole SMB, pour Server Message Block, est un protocole client-serveur qui permet d'accéder à des ressources via le réseau, et particulièrement l'accès à des fichiers et des dossiers. Par exemple, si vous utilisez partagez des fichiers avec une machine Windows et que vous accédez à ses fichiers depuis une autre machine, la communication sera effectuée via le protocole SMB.
+
+https://www.it-connect.fr/le-protocole-smb-pour-les-debutants/
+
+Partage de fichier / Montage de lecteur réseau
+
+Utilisé sur Windows mais également Linux (SAMBA).

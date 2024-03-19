@@ -1,0 +1,16 @@
+###################################################################################
+### Accepter le serveur DHCP sur le Firewall ###
+##
+#
+
+# Pour permettre la LAN 01 à accéder au serveur sur la LAN 02 :
+- Désactiver le NAT sur la règle
+- Activer le serveur DHCP
+- Passer en Relay DHCP 
+- Référer l'adresse du serveur
+
+
+# POUR CREER UNE NEW ADDRESS SUR FORTIGATE :
+# Il est nécessaire de se mettre en Subnet et de rentrer l'adresse IP suivi de /32, autrement ça ne marchera pas
+
+

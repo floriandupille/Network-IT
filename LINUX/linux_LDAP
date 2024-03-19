@@ -1,0 +1,8 @@
+
+Le protocole LDAP (Lightweight Directory Access Protocol) permet aux 
+utilisateurs de trouver des données sur des entreprises, des personnes, 
+etc. Ce protocole a deux objectifs principaux : stocker des données 
+dans l'annuaire LDAP et authentifier les utilisateurs qui veulent y 
+accéder.
+
+https://www.redhat.com/fr/topics/security/what-is-ldap-authentication#:~:text=Le%20protocole%20LDAP%20(Lightweight%20Directory,utilisateurs%20qui%20veulent%20y%20acc%C3%A9der.

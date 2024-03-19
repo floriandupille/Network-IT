@@ -1,0 +1,88 @@
+##############################################################################################################
+### Normes réseau sans fil ###
+##
+#
+
+- OWASP : Open Web Application Security Project - organisation internationale à but non lucratif qui se consacre à la sécurité des applications web. Elle propose gratuitement de la documentation, des outils, des vidéos et des forums dont le top 10 de l'OWASP :
+    - Injection (attaques par) > validation/assainisement des données soumises par les utilisateurs
+    - Authentification déficiente > authentification à deux facteurs
+    - Exposition de données sensibles > 
+    - Entités XML externes (XEE)
+    - Contrôle d'accès rompu
+    - ...
+
+- ANSSI : Agence nationale de la sécurité des systèmes d'information
+
+- IETF : Internet Engineering Task Force - élabore et promeut des standards Internet, en particulier les standards qui composent la suite de protocoles Internet
+
+- IEEE : Institute of Electrical and Electronics Engineers
+
+- ICANN : Internet Corporation for Assigned Names and Numbers
+
+    - IANA : Internet Assigned Numbers Authority - supervise l'allocation globale des adresses IP,  l'allocation des numéros de systèmes autonomes, la gestion de la zone racine dans les Domain Name System
+
+- RIPE NCC : RIPE Network Coordination Centre - registre régional d'adresses IP. Il dessert l'Europe et une partie de l'Asie (Moyen-Orient)
+
+#########################################
+
+- RFC 1918 : définie les plages d'adressage IP 
+
+- PDU Data : Protocol Data Unit - unité de mesure des informations échangées dans un réseau informatique
+    - segment
+    - datagramme
+    - paquet 
+
+#########################################
+
+- IEEE 802 : comité de l'IEEE qui décrit une famille de normes relatives aux réseaux locaux et métropolitains basés sur la transmission de données numériques par des liaisons filaires ou sans fil
+    - 802.1 : 
+    - 802.1q
+    - 802.1x
+
+    - 802.1af (PoE)
+
+    - 802.11ac
+    - 802.11ax
+
+    - 802.3ab (Gigabit 1000 base-T)
+
+    - 802.15 (bluetooth)
+
+#########################################
+
+- SOA Record
+- A Record
+
+#########################################
+
+- LDAP
+- SAM account
+- SMB
+- DC DN CN
+- CIFS
+- NFS
+- iSCSI
+
+#########################################
+
+VMDK
+qcow2
+SAN
+
+#########################################
+
+TRIM SSD
+TBW SSD
+IOPS disk
+
+#########################################
+
+PDU electrical
+UPS electrical
+
+#########################################
+
+NIS PAM NSS
+SSSD Architecture
+EXT4
+

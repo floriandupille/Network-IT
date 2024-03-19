@@ -1,0 +1,71 @@
+############################################################################
+### Serveur FTP ###
+##
+# 
+
+# ports : 20, 21
+
+## Interdire aux utilisateurs de lire le répertoire home des autres 
+# utilisateurs
+dpkg-reconfigure adduser  > Passer à NO
+
+# Ajout d'un utilisateur
+adduser sammy
+
+# Installer VSFTP
+apt-get update 
+apt-get install vsftpd
+
+# Backup du fichier de config VSFTP par défaut
+cp /etc/vsftpd.conf /etc/vsftpd.conf.backup
+
+# Création du dossier parent CHROOT
+mkdir /home/sammy/ftp
+chown nobody:nogroup /home/sammy/ftp/
+
+# La commande chmod a-w concerne toutes les catégories d’utilisateurs.
+chmod a-w /home/sammy/ftp
+
+# Création dossier FTP CHROOT
+mkdir /home/sammy/ftp/files
+chown sammy:sammy /home/sammy/ftp/files
+
+# Création fichier test
+echo "hello everyone" | tee /home/sammy/ftp/files/test.txt
+
+# Paramétrage VSFTP
+nano /etc/vsftpd.conf
+
+-------------------------------------------
+listen=NO
+listen_ipv6=YES
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+dirmessage_enable=YES
+use_localtime=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+
+chroot_local_user=YES
+user_sub_token=$USER
+local_root=/home/$USER/ftp
+userlist_enable=YES
+userlist_file=/etc/vsftpd.userlist
+userlist_deny=NO
+secure_chroot_dir=/var/run/vsftpd/empty
+pam_service_name=vsftpd
+------------------------------------------
+
+## Ajout d'utilisateur à VSFTP
+# Enfin, ajoutons notre utilisateur à /etc/vsftpd.userlist. 
+# Utilisez l'option -a de la commande tee -a pour ajouter au fichier :
+echo "sammy" | tee -a /etc/vsftpd.userlist
+
+# Redémarrage du service
+systemctl restart vsftpd
+
+# Débug du service VSFTP
+systemctl status vsftpd
+
+tail -f /var/log/syslog

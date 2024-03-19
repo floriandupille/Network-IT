@@ -1,0 +1,57 @@
+####################################################################################
+### Firewall ###
+##
+#
+# Next Gen FireWall = NGFW
+#
+# blocklist of Toulouse
+#
+# Injection par CLA
+#
+# Fortigate = leader dans le marché du firewall
+#
+## Certification Fortigate - Free
+https://training.fortinet.com/local/staticpage/view.php?page=library_fortigate-security
+#
+## Certification JUNOS (CCNA like)
+https://learningportal.juniper.net/juniper/user_activity_info.aspx?id=JUNIPER-OPEN-LEARNING&TrackId=jnet-nav
+#
+#
+#
+### FortiGate ###
+##
+#
+# Importation de la VM:
+- Télécharger la VM Forti pour VMware https://nc.spoofing.cloudns.pro/s/KtjfABL5LBeb3X9
+- Ouvrir la VM grâce au fichier OVF > FortiGate-VM64.ovf
+- Supprimer les cartes réseaux de 5 à 10 (garder en 4)
+- Configurer la carte réseau 1 en mode pont identifié (pas bridge auto)
+- Configurer les cartes réseaux 2,3,4 en LAN Segment, créer 3 vSwitch (LAN segment)
+- Démarrer la VM et suivre les instructions ci-dessous pour reset la licence et administrer le firewall:
+#
+# Login: qd,in (admin)
+# Password: aucun de base [Entrée]
+# New Password: toor
+# Repeat Password: toor
+#
+# Reset de la licence:
+execute factoryreset
+
+# Si le firewall dit "INVALID" recommencer une seconde fois execute factoryreset
+# Après un redémarrage
+
+Login: qd,in (admin)
+Password: aucun de base [Entrée]
+New Password: toor
+Repeat Password: toor
+
+# S'accorder des accès d'administration sur l'interface 1 (WAN):
+config system interface
+    edit port1
+    set allowaccess https http ssh
+    end
+
+# Obtenir l'IP du WAN pour administrer le firewall en WebGUI:
+get system interface physical
+
+# Se rendre dans votre navigateur et renseigner l'IP http://wan_du_firewall/ pour administrer votre Firewall

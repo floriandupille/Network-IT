@@ -1,0 +1,31 @@
+############################################################################
+### Créer une instance EC2 avec CLI ###
+##
+#
+
+# lister les AMI (image = image ISO) d'une région
+Utiliser un locator https://cloud-images.ubuntu.com/locator/ec2/
+
+# Trouver les éléments suivants pour pouvoir créer une instance EC2 avec AWS CLI:
+- l'id de l'AMI ami-XXXXXX ubuntu amd64, pour la région eu-west-3 :
+ami-0be32dc6b418dd51c
+https://console.aws.amazon.com/ec2/home?region=eu-west-3#launchAmi=ami-0be32dc6b418dd51c
+
+- le nom KeyName de votre clef SSH : FloKey
+
+- l'id GroupId de votre security group allias groupe de sécurité : 
+"GroupId": "sg-0ebc78ecd596c95e3"
+
+- l'id SubnetId du subnet : on prend le plus proche de nous, soit Marseille --> eu-west-3c
+Son subnetId = subnet-02efcaacacb7baafc
+
+- changer la valeur Value du tag Name : au choix
+FloEC2
+
+# Lancer la commande à partir des éléments précédemment recherchés
+aws ec2 run-instances --image-id  ami-XXXXXX --count 1 --instance-type t2.nano --key-name votreclefSSH-XYZ --security-group-ids sg-XXXXXXXX --subnet-id subnet-XXXXXXX --associate-public-ip-address --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Un_Petit_Nom}]"
+
+
+
+## Supprimer une instance
+aws ec2 terminate-instances --instance-ids id_de_votre_instance

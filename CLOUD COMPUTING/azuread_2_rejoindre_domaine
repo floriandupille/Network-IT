@@ -1,0 +1,29 @@
+####################################################################
+### Rejoindre un domaine Azure AD ###
+##
+#
+
+# Joindre un poste avec un compte local : 
+
+
+
+(Pour l'exercice, nous ferons avec Sandbox E5 Office365 Tenant)
+
+# LAB - Sandbox E5 Office365 Tenant + Intune
+# Create a personnal Microsoft account if you don't or use a Google account if is link to Microsoft
+# Save all the LOGIN & Password it give to you !!!!
+
+https://developer.microsoft.com/en-us/microsoft-365/dev-program
+
+
+# Azure AD - Entra ID
+https://entra.microsoft.com/
+
+# Intune
+https://endpoint.microsoft.com/
+
+# Office 365 Admin Center
+https://admin.microsoft.com/
+
+# Microsoft 365 Defender
+https://security.microsoft.com/

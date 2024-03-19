@@ -1,0 +1,123 @@
+#######################################################################################
+### Scripts Powershell ###
+##
+#
+# Les scripts sont exécutés sous Windows PowerShell ISE en tant qu'administrateur
+
+### Créer des OU 
+#
+# Créez un fichier csv (avec le Bloc-note) contenant les informations de vos OU : 
+
+    Nom;Chemin
+    France;DC=wrdn,DC=lab
+    Paris;OU=France,DC=wrdn,DC=lab
+    Lyon;OU=France,DC=wrdn,DC=lab
+    Marketing;OU=Paris,OU=France,DC=wrdn,DC=lab
+    IT;OU=Paris,OU=France,DC=wrdn,DC=lab
+    RH;OU=Lyon,OU=France,DC=wrdn,DC=lab
+    Compta;OU=Lyon,OU=France,DC=wrdn,DC=lab
+
+# Ici, le ";" est le Delimiter qui permettra au script de distinguer le nom de l'OU de son chemin d'accès. DC correspond aux deux caractères contenu dans le nom du domaine.
+
+# Créez le script Powershell en .ps1 : 
+
+    # Importer le module Active Directory
+    Import-Module ActiveDirectory
+
+    # Lire le fichier CSV
+    $csv = Import-Csv -Path C:\Users\Administrateur\Documents\scripts\windows_ou_data.csv -Delimiter ";"
+
+    # Parcourir chaque ligne du fichier CSV
+    foreach ($row in $csv) {
+        # Vérifier si l'OU existe déjà
+        $ou = Get-ADOrganizationalUnit -Filter {DistinguishedName -eq $row.Chemin} -ErrorAction SilentlyContinue
+
+        # Si l'OU n'existe pas, la créer
+        if ($ou -eq $null) {
+            New-ADOrganizationalUnit -Name $row.Nom -Path $row.Chemin -PassThru
+            Write-Host "OU $($row.Nom) a été créée."
+        } else {
+            Write-Host "OU $($row.Nom) existe déjà."
+        }
+
+# Ne pas oublier de changer le chemin du fichier .csv à lire !
+# Les OU seront créées à la racine du domaine.
+
+### Créer des Users dans les OU
+#
+# Créez un nouveau .csv avec Bloc-note contenant les informations des Users : 
+
+    SamAccountName;password;path;GivenName;Surname;Initials;Name;DisplayName;UserPrincipalName;Department;Description;Office;OfficePhone;EmailAddress;StreetAddress;POBox ;City;State;PostalCode;Title;Company
+    mark.test1;Football22!;OU=Compta,OU=Lyon,OU=France,DC=wrdn,DC=lab;Mark;test1;B;Mark Test1;Mark Test1;mark.test1@activedirectorypro.com;Marketing;;Marketing Office;541-213-5441;mark.test1@activedirectorypro.com;123 w maple;;Nixa;Mo;65421;Jr Admin;AD Pro
+    mark.test2;Football22!;OU=Compta,OU=Lyon,OU=France,DC=wrdn,DC=lab;Mark;test2;J;Mark Test2;Mark Test2;mark.test2@activedirectorypro.com;Marketing;;Marketing Office;541-213-5442;mark.test2@activedirectorypro.com;345 e maple;;Ozark;Mo;65421;Sr Admin;AD Pro
+    mark.test3;Football22!;OU=Compta,OU=Lyon,OU=France,DC=wrdn,DC=lab;Mark;test3;J;Mark Test3;Mark Test3;mark.test3@activedirectorypro.com;;;Marketing Office;541-213-5443;mark.test3@activedirectorypro.com;346 e maple;;Ozark;Mo;;;
+    mark.test4;Football22!;OU=RH,OU=Lyon,OU=France,DC=wrdn,DC=lab;Mark;test4;J;Mark Test4;Mark Test4;mark.test4@activedirectorypro.com;;;Marketing Office;541-213-5444;mark.test4@activedirectorypro.com;347 e maple;;Ozark;Mo;;;
+    mark.test5;Football22!;OU=RH,OU=Lyon,OU=France,DC=wrdn,DC=lab;Mark;test5;J;Mark Test5;Mark Test5;mark.test5@activedirectorypro.com;;;Marketing Office;541-213-5445;mark.test5@activedirectorypro.com;348 e maple;;Ozark;Mo;;;
+    mark.test6;Football22!;OU=IT,OU=Paris,OU=France,DC=wrdn,DC=lab;Mark;test6;J;Mark Test6;Mark Test6;mark.test6@activedirectorypro.com;;;Marketing Office;541-213-5446;mark.test6@activedirectorypro.com;349 e maple;;Ozark;Mo;;;
+    mark.test7;Football22!;OU=IT,OU=Paris,OU=France,DC=wrdn,DC=lab;Mark;test7;J;Mark Test7;Mark Test7;mark.test7@activedirectorypro.com;;;Marketing Office;541-213-5447;mark.test7@activedirectorypro.com;350 e maple;;Ozark;Mo;;;
+    mark.test8;Football22!;OU=Marketing,OU=Paris,OU=France,DC=wrdn,DC=lab;Mark;test8;J;Mark Test8;Mark Test8;mark.test8@activedirectorypro.com;;;Marketing Office;541-213-5448;mark.test8@activedirectorypro.com;351 e maple;;Ozark;Mo;;;
+    mark.test9;Football22!;OU=Marketing,OU=Paris,OU=France,DC=wrdn,DC=lab;Mark;test9;J;Mark Test9;Mark Test9;mark.test9@activedirectorypro.com;;;Marketing Office;541-213-5449;mark.test9@activedirectorypro.com;352 e maple;;Ozark;Mo;;;
+    mark.test10;Football22!;OU=Marketing,OU=Paris,OU=France,DC=wrdn,DC=lab;Mark;test10;J;Mark Test10;Mark Test10;mark.test10@activedirectorypro.com;;;Marketing Office;541-213-5450;mark.test10@activedirectorypro.com;353 e maple;;Ozark;Mo;;;
+
+# Les noms des OU et des DC sont à changer.
+# Les Users seront ajoutés selon les chemins en suivant le chemin défini en sens inverse : dans notre exemple, ce sera Compta > Lyon > France > wrdn.lab
+
+# Créez le script Powershell en .ps1 : 
+
+    #Importe le modue active directory pour lancer AD cmdlets
+    Import-Module activedirectory
+
+    #Regarder les donnees dans le fichier CSV et remplacer par la variable $ADUsers
+    $Users = Import-csv C:\Users\Administrateur\Documents\scripts\windows_import_users.csv -delimiter ";"
+
+    #Parcourir chaque ligne contenant les details de l_utilisateur dans le fichier CSV  
+    foreach ($User in $Users) {
+        # Lire les donnees utilisateur de chaque champ de chaque ligne
+       $Username       = $User.SamAccountName
+
+        # Verifiez si l_utilisateur existe deja dans AD
+        if (Get-ADUser -F {SamAccountName -eq $Username}) {
+             #Si l_utilisateur existe, donner un message d_avertissement
+             Write-Warning "Un compte d_utilisateur avec le nom d_utilisateur $Username existe deja dans Active Directory."
+        }
+        else {
+            # L_utilisateur n_existe pas, alors creez le nouveau compte d_utilisateur
+
+            # creer une table de hachage aggreger les parametres
+            $userProps = @{
+                SamAccountName             = $User.SamAccountName                   
+                Path                       = $User.path      
+                GivenName                  = $User.GivenName 
+                Surname                    = $User.Surname
+                Initials                   = $User.Initials
+                Name                       = $User.Name
+                DisplayName                = $User.DisplayName
+                UserPrincipalName          = $user.UserPrincipalName 
+                Department                 = $User.Department
+                Description                = $User.Description
+               Office                     = $User.Office
+                OfficePhone                = $User.OfficePhone
+               EmailAddress               = $User.EmailAddress
+               StreetAddress              = $User.StreetAddress
+                POBox                      = $User.POBox
+                City                       = $User.City
+               State                      = $User.State
+               PostalCode                 = $User.PostalCode
+                Title                      = $User.Title
+                Company                    = $User.Company
+                AccountPassword            = (ConvertTo-SecureString $User.password -AsPlainText -Force) 
+                Enabled                    = $true
+               ChangePasswordAtLogon      = $true
+           }   #end userprops   
+
+             New-ADUser @userProps
+             Write-Host "Le compte utilisateur $User a ete cree." -ForegroundColor Cyan
+   
+
+        } #end else
+   
+    }
+
+# Ne pas oublier de changer le chemin du fichier .csv à lire !
+
+## QUAND LES SCRIPTS ONT BESOIN D'ETRE PARTAGES VERS D'AUTRES MACHINES, ILS DOIVENT ETRE ENREGISTRES DANS LE SYSVOL POUR ETRE PARTAGES DANS LE RESEAU !!!

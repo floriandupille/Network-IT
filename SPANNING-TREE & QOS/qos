@@ -1,0 +1,8 @@
+###################################################################
+### Quality Of Service ###
+##
+#
+
+Principe : on établit un ordre de priorité sur les services (par exemple la téléphonie, qui par défaut est considéré comme le plus important en entreprise).
+Ainsi, si plusieurs services exploitent le réseau en même temps, la QoS allouera plus de débit au service prioritaire en réduisant le débit utilisé par les autres services.
+

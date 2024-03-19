@@ -1,0 +1,62 @@
+### Commandes principales ###
+##
+apt update
+# met à jour la liste des fichiers disponibles dans les dépôts APT 
+# présents dans le fichier de configuration /etc/apt/sources.list.
+# A faire avant toute nouvelle installation.
+
+### Gestion des users ###
+##
+cat /etc/passwd
+# donne la liste des users existants
+cat /etc/shadow
+# donne la liste des mots de passe (chiffrés)
+cat /etc/gshadow
+# donne la liste des mdp groupes
+
+nano /etc/sudoers
+-
+usermod -aG sudo <username>
+#accorder les droits sudo à un user
+groups <username> --> #vérifier que le changement de droit est effectif"
+
+usermod –login <new_username> –home /home/<new_username> –move-home <actual_username>
+#changer le nom d'un user
+
+mkfs.ext4 /dev/<nom_de_partition>
+
+cd /var/www
+#accès au serveur web
+
+netstat -laputen
+#voir les ports utilisés
+
+
+setxkbmap fr 
+#passe en AZERTY
+
+
+find / -name <nom_de_fichier>*
+# trouve l'ensemble des fichiers commençant par <nom_de_fichier>,
+# la fin du nom peut être également précisé. Le / permet de chercher dans 
+# tout les dossiers à la racine.
+# Ex : find / -name pass*
+
+
+## Gestion des services ###
+##
+systemctl list-units --type=service
+service --status-all
+#vérifier l'ensemble des services installés sur le serveur
+
+service <service> start
+#permet de démarrer un service donné, ex : proftpd
+
+systemctl <command> <service>
+#intéragir avec un service : 
+    systemctl status <service>
+    #vérifier l'état du service (inactive, active)
+    systemctl start <service>
+    systemctl stop <service>
+    systemctl restart <service>
+

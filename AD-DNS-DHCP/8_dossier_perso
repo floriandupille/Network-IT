@@ -1,0 +1,88 @@
+#######################################################################
+### Dossier perso - Montage du disque automatique ###
+##
+#
+
+## Méthode 1 (manuelle)
+# 
+# Création d'un dossier racine (Perso) sur un disque et activation du partage : 
+configurer le Partage avancé aux Utilisateurs du domaine > Contrôle total
+
+# Ajout des Users que l'on souhaite configurer en tant que membres d'un' Groupe Global "GG_Domain_Users"
+
+# Ajout des droits de Sécurité au Groupe Global :
+S'applique à > Ce dossier seulement
+Autorisations de base (afficher les autorisations avancées) > tout désactiver et activer "Parcours du dossier/exécuter le fichier"
+
+# Mappage du dossier perso : 
+User cible > Propriétés > Profil > Dossier de base : Connecter à un lecteur (U:) à "\\srv-ad01\Perso\%username%"
+
+La fonction %username% va traduire automatiquement le nom du profil user
+
+# Démarrer la session du User et vérifier le mappage automatique du lecteur U: sur son poste
+Il doit pouvoir avoir les pleins droits sur ce dossier sans avoir accès direct au dossier Perso
+
+
+## Méthode 2 (script)
+#
+# Création d'un nouveau script : 
+
+============================================================================
+# Importer le module Active Directory
+Import-Module ActiveDirectory
+
+# Définir le chemin de l'unité d'organisation contenant les utilisateurs
+$OU_path = "OU=Marketing,OU=Paris,OU=France,DC=wrdn,DC=lab"
+
+# Définir le chemin du dossier partagé contenant les dossiers personnels
+$Base_Folder = "\\srv-ad01\Perso\"
+
+# Récupérer la liste des utilisateurs de l'unité d'organisation
+$users = Get-ADUser -SearchBase $OU_path -Filter *
+
+# Pour chaque utilisateur
+foreach ($user in $users) {
+
+    # Récupérer le nom d'utilisateur (sAMAccountName)
+    $username = $user.sAMAccountName
+
+    # Créer le chemin du dossier personnel
+    $Home_Folder = $Base_Folder + $username
+
+    # Vérifier si le dossier personnel existe déjà
+    if (-not (Test-Path $Home_Folder)) {
+
+        # Si non, créer le dossier personnel
+        New-Item -Path $Home_Folder -ItemType Directory
+
+        # Attribuer les droits NTFS au propriétaire du dossier
+        $acl = Get-Acl $Home_Folder
+        $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule($username, "FullControl", "ContainerInherit, ObjectInherit", "None", "Allow")
+        $acl.SetAccessRule($accessRule)
+        Set-Acl $Home_Folder $acl
+    }
+
+    # Vérifier si le dossier personnel est déjà monté
+    if (-not ($user.HomeDirectory)) {
+
+        # Si non, monter le dossier personnel
+        Set-ADUser $user -HomeDirectory $Home_Folder -HomeDrive H:
+    }
+}
+=========================================================================
+
+! Les lignes 35, 38 et 69 sont à modifier pour adapter le script à notre environnement !
+
+# Ce script fonctionne avec le Partage activé sur le dossier cible, pas besoin de Groupe Global.
+# Le script crée un dossier par User contenu dans l'OU indiquée, leur attribue les droits complets et monte le lecteur réseau sur la lettre indiquée (H:).
+
+# Vérification dans CMD ou Terminal Powershell : 
+net use 
+
+Etat        Local      Distant                       Réseau
+
+------------------------------------------------------------------------------
+OK          H:         \\srv-ad01\Perso\username     Microsoft Windows Network
+
+
+NET USE : permet de voir et de monter les lecteurs réseaux

@@ -1,0 +1,14 @@
+##################################################################################################
+### Modèle de quota ###
+##
+#
+
+Les quotas permettent d'assigner un espace limité par utilisateur sur un espace de stockage partagé.
+Une fois dépassé l'utilisateur ne peut plus ajouter de contenu sur l'espace partagé.
+
+(((Les quotas permettent de surveiller la capacité de stockage actuelle d'un lecteur disque et de définir des limites (en pourcentage) pour programmer des alertes et prévenir du risque de saturation de l'espace.
+Lorsqu'un pourcentage de la limite indiquée dans les paramètres est atteint, une première alerte est envoyé au destinataire désigné, un utilisateur du domaine, préférentiellement un ou plusieurs administrateurs.)))
+
+
+https://www.pc2s.fr/gestion-des-quotas-de-volumes-et-de-dossiers-windows-serveur-2019-2016-2012-r2/
+

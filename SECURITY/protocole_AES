@@ -1,0 +1,6 @@
+#######################################################################################
+### Protocole AES ###
+##
+#
+
+Le Standard de Chiffrement Avancé (AES) est un chiffrement de bloc symétrique sélectionné par le gouvernement américain pour protéger les données classifiées. Le chiffrement AES-256 utilise une clé de 256 bits pour chiffrer et déchiffrer un bloc de messages.

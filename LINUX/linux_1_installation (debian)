@@ -1,0 +1,23 @@
+- Installation > Graphic install 
+- Accepter l'image miroir
+- Dans les programmes voulus, ne sélectionner que les 3 dernières lignes (serveur web, SSH, …)
+- se connecter à root pour la suite
+
+1. nano /etc/apt/sources.list 
+2. Mettre la première ligne en commentaire (#) et ajouter sur les lignes violettes “contrib non-free” juste avant "non-free-firmware"
+3. Ctrl+X pour sauvegarder
+
+4. apt update
+5. apt upgrade la première fois uniquement (ne plus upgrade par la suite)
+6. apt install sudo
+7. nano /etc/sudoers
+8. à la ligne "# User privilege specification", recopier la ligne suivante en changeant le nom du user
+
+user                   ALL=(ALL:ALL) ALL
+
+utilisateur groupe     hôte     groupes 
+                        utilisateurs    commandes
+
+
+9. apt install tree
+

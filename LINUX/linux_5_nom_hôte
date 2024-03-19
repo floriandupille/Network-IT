@@ -1,0 +1,14 @@
+###########################################################################
+### Changer le nom d'hôte (machine) d'une VM Ubuntu ###
+##
+#
+hostnamectl hostname lenomdevotrechoix
+
+# Lancer la commande hostnamectl pour observer la modification
+Vérifier si le nom de l'hôte correspond dans le fichier de configuration 
+suivant:
+hostnamectl
+
+nano /etc/hostname
+nano /etc/hosts
+

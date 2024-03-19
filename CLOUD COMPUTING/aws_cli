@@ -1,0 +1,88 @@
+############################################################################
+### AWS CLI pour Windows ###
+##
+#
+
+# Téléchargement pour Windows : 
+https://aws.amazon.com/cli/
+
+# Suivez les étapes de l'assistant d'installation : 
+Vous pouvez généralement accepter les paramètres par défaut, mais assurez-vous de cocher l'option "Add AWS CLI to system PATH" pour ajouter AWS CLI à votre chemin système (PATH).
+
+# Vérifiez l'installation : Une fois l'installation terminée, ouvrez une nouvelle invite de commandes (Command Prompt) et exécutez la commande :
+aws --version
+
+# Pour créer une clé d'accès AWS (Access Key) en tant que client, suivez ces étapes :
+# Connectez-vous à la Console AWS : 
+Rendez-vous sur https://us-east-1.console.aws.amazon.com/iamv2/
+ou rechercher le service IAM > Utilisateurs
+
+# Accédez à vos informations d'identification de sécurité : 
+Dans la console AWS cliquer en haut à droite sur votre Login, puis informations d'identification de sécurité.
+OU créer un nouvel utilisateur
+
+# Créez une clé d'accès : 
+Dans la section "Clés d'accès" (à droite du nom), cliquez sur "Créer une clé d'accès" pour générer une nouvelle paire de clés d'accès (Access Key ID et Secret Access Key).
+
+# Notez la clé d'accès : 
+Après la création, assurez-vous de noter la clé d'accès et la clé d'accès secrète. Ces informations sont cruciales pour l'authentification via l'AWS CLI ou d'autres SDK AWS.
+
+# Tapez aws configure dans votre terminal pour configurer AWS CLI avec votre clé d'accès : 
+aws configure
+> clé d'accès
+> clé d'accès secrète
+> lieu : eu-west-3
+> format : none
+
+############################################################################
+### AWS CLI pour Linux ###
+##
+#
+https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#cliv2-linux-install
+
+
+
+
+##################################################################
+### Lignes de commandes ###
+##
+#
+
+aws ec2 describe-instances --query "Reservations[*].Instances[*].{PublicIP:PublicIpAddress,PrivateIP:PrivateIpAddress,Name:Tags[?Key=='Name']|[0].Value,Type:InstanceType,Status:State.Name,VpcId:VpcId}" --filters Name=instance-state-name,Values=running --output table
+# Tableau des VPC et des informations : Nom, IP privées, IP publiques, Status, Type, VpcId
+
+aws ec2 describe-instances --output table --query 'Reservations[].Instances[].[join(`,`,Tags[?Key==`Name`].Value),State.Name,InstanceId]'
+# Même tableau avec moins d'infos
+
+aws ec2 describe-instances --query "Reservations[*].Instances[*].{ID:InstanceId,Name:Tags[?Key=='Name']|[0].Value,Status:State.Name}" --filters "Name=instance-state-name,Values=running" --output table
+# 
+
+aws ec2 describe-instances --query "Reservations[*].Instances[*].{ID:InstanceId,Name:Tags[?Key=='Name']|[0].Value,Status:State.Name}" --filters "Name=instance-state-name,Values=running" --output table
+# Tableau de toutes les instances existantes
+
+aws ec2  stop-instances --instance-ids (InstanceId)
+# Arrêter l'instance précisée
+
+aws ec2 ?
+# help
+
+aws ec2 describe-subnets
+# Liste des VPC (Virtual Private Cloud)
+
+aws ec2 describe-security-groups
+# Liste des groupes de sécurités
+
+aws ec2 describe-key-pairs
+# Liste des clefs SSH
+
+
+
+
+
+
+
+
+
+
+
+

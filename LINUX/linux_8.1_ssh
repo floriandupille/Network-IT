@@ -1,0 +1,83 @@
+###########################################################################
+### Configuration SSH ###
+##
+# SSH : protocole permettant d'établir une communication chiffrée, 
+# donc sécurisée (on parle parfois de tunnel), sur un réseau informatique 
+# (intranet ou Internet) entre une machine locale (le client) et une 
+# machine distante (le serveur).
+
+# port : 22
+
+# Usages de SSH : 
+# - Accéder à distance à la console en ligne commande (shell), 
+# ce qui permet d'effectuer la totalité des opérations courantes et/ou 
+# d'administration sur la machine distante.
+# - Déporter l'affichage graphique de la machine distante.
+# - Transferts de fichiers en ligne de commande.
+# - Montage ponctuel de répertoires distants, soit en ligne de commande, 
+# soit via Nautilus sous GNOME par exemple.
+# - Montage automatique de répertoires distants.
+# - Déporter de nombreux autres services ou protocoles (voir SSH Avancé).
+##
+## Installation de openssh-server
+https://doc.ubuntu-fr.org/ssh
+
+ssh -V
+#pour vérifier ce qui est déjà installé, openssh-client est un paquet par
+#défaut sur Ubuntu
+'OpenSSH_8.2p1 Ubuntu-4ubuntu0.5, OpenSSL 1.1.1f  31 Mar 2020'
+#Sinon, installer manuellement :
+apt-get install openssh-client
+
+#Connaître la version de la bibliothèque ssl:
+dpkg -l libssl*
+
+#Vérifier le status
+sudo systemctl status ssh
+#Activer
+sudo systemctl start ssh
+#Arrêter
+sudo systemctl stop ssh
+#Relancer
+sudo systemctl restart ssh
+
+# Accéder au terminal shell pour ouvrir une session SSH vers un user
+# (Si tout problème rencontré avec le terminal, se réferer à : 
+# https://learn.microsoft.com/fr-fr/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui)
+
+# NOTE : vérifier que le pare-feu ufw est désactivé
+sudo ufw enable
+sudo ufw allow ssh
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow openssh
+sudo ufw status
+
+
+ssh <username>@192.168.X.X
+#par défaut cette commande demandera à la suite le mdp du user
+
+## Interdire des utilisateurs sur SSH
+# Créer un groupe qui permettra aux utilisateurs membre d'accéder au 
+# serveur en SSH. 
+addgroup authorized_ssh_group
+
+# Ajouter les utilisateurs que l'on souhaite qui disposeront des permissions à SSH 
+usermod -a -G authorized_ssh_group <username>
+
+# Editer le fichier de configuration du service SSH: 
+nano /etc/ssh/sshd_config
+
+# Ajouter la ligne suivante:
+AllowGroups authorized_ssh_group
+
+# Redémarrer le service SSH: 
+systemctl restart ssh
+
+# On peut à l'inverse de l'option Allow utiliser l'option Deny:
+DenyUsers les_users
+DenyGroups forbiden_ssh_group
+
+# Pour autoriser le user SSH à manager le serveur, ne pas oublier de lui
+# accorder les droits sudo
+usermod -a -G sudo <username>

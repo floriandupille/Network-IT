@@ -1,0 +1,23 @@
+##############################################################################
+### Types de sauvegarde ###
+##
+#
+
+1. **Sauvegarde complète :**
+   - Copie l'intégralité des données sélectionnées.
+   - Utilisée comme point de départ pour d'autres types de sauvegardes.
+   - Occupe plus d'espace de stockage, mais la restauration est simple.
+
+2. **Sauvegarde différentielle :**
+   - Sauvegarde les données modifiées depuis la dernière sauvegarde complète.
+   - Moins d'espace que la sauvegarde complète, mais plus que l'incrémentielle.
+   - La restauration nécessite la dernière sauvegarde complète et la différentielle la plus récente.
+
+3. **Sauvegarde incrémentielle :**
+   - Ne sauvegarde que les données modifiées depuis la dernière sauvegarde (complète ou incrémentielle).
+   - Occupe le moins d'espace de stockage.
+   - La restauration nécessite la dernière sauvegarde complète et toutes les sauvegardes incrémentielles depuis.
+
+
+
+

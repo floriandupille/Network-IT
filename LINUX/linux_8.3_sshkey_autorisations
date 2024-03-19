@@ -1,0 +1,92 @@
+############################################################################
+### Configuration d'un clé SSH ###
+##
+# 
+
+## Générer une clé SSH ##
+# Si le répertoire .ssh n'existe pas :
+mkdir /home/<username>/.ssh
+cd /home/<username>/.ssh
+
+# Générer une clef SSH, garder le path et le nom par défaut id_rsa
+ssh-keygen
+
+# Ajoutez la clé publique au fichier authorized_keys en saisissant 
+# ce qui suit :
+cat /home/<username>/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+# Appliquer une permissions sur le dossier .ssh
+chmod -R 700 /home/<username>/.ssh/ 
+
+# SUR LE TERMINAL WINDOWS :
+# Importer la clef privée avec SCP dans votre dossier utilisateur Windows:
+scp <username>@10.0.X.X:/home/<username>/.ssh/id_rsa "C:\Users\votre_user_windows\.ssh\<définir_nom_clé>"
+
+## Attribution des accès SSH key ##
+# Modifier le fonctionnement du service SSH sur la VM Linux:
+nano /etc/ssh/sshd_config -c
+
+# Désactiver l'authentification par mot de passe et n'accepter que 
+# l'authentification par certificat
+Commenter ou Dé-Commenter les lignes suivantes et changer les valeurs:
+-------------------------------------------------------
+# Include /etc/ssh/sshd_config.d/*.conf
+PermitRootLogin without-password
+PasswordAuthentication no
+PubkeyAuthentication yes
+ChallengeResponseAuthentication no
+--------------------------------------------------------
+
+## Créer une exception pour permettre à un user de se connecter avec un
+## mot de passe
+# 
+# Après vous être assuré que tous vos users ne peuvent se connecter que 
+# via une clé ssh, retournez dans votre fichier sshd_config :
+sudo nano /etc/ssh/sshd_config -c
+
+# Ajoutez en fin de fichier les paramètres suivants : 
+-------------------------------------------------------
+Match User nom_du_user
+PasswordAuthentication yes
+Match all
+-------------------------------------------------------
+
+# Redémarrer le service SSH
+systemctl restart ssh
+
+# Connectez-vous avec la clé ssh depuis le poste Windows 
+ssh -i "chemin_destination_clé" <username>@192.168.X.X
+
+ssh -i "C:\Users\utilisateur\.ssh\sshkeyto" toto@192.168.1.158
+
+
+
+###########################################################################
+### Créer une bannière d'avertissement SSH ###
+##
+#
+# Les avertissements de bannière SSH sont nécessaires lorsque les entreprises 
+# ou les organisations souhaitent afficher un avertissement sévère pour 
+# décourager les parties non autorisées d'accéder à un serveur.
+# Ces avertissements sont affichés juste avant l'invite du mot de passe afin 
+# que les utilisateurs non autorisés qui sont sur le point de se connecter 
+# soient informés des conséquences d'une telle connexion. En règle générale, 
+# ces avertissements constituent des conséquences juridiques que les utilisateurs 
+# non autorisés peuvent subir s'ils décident de procéder à l'accès au serveur.
+#
+##
+
+# Ajouter dans le fichier de config du serveur SSH (sshd_config) la ligne suivante :
+--------------------------------------------
+Banner /etc/ssh/banniere_ssh
+--------------------------------------------
+
+# Créer un fichier texte de bannière SSH avec des avertissements
+nano /etc/ssh/banniere_ssh
+
+# Générer une bannière en ASCII avec ce site
+https://manytools.org/hacker-tools/ascii-banner/
+
+## Redémarrer le service SSH et connectez-vous en SSH pour observer votre œuvre !
+
+

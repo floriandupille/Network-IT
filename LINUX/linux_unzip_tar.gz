@@ -1,0 +1,27 @@
+#############################################################################
+### Décompresser un fichier tar.gz sous Linux ###
+##
+#
+https://www.tutos.eu/7393
+
+# Transférer le fichier à décompresser de Windows vers le serveur Linux 
+scp <username>@<host_ip>:/chemin/fichier /C:/chemin/fichier.tar.gz
+
+# Décompresser le fichier
+tar -xzf <fichier>.tar.gz -C /tmp/répertoirecible
+
+# Vérifier la présence du fichier décompressé
+ls
+
+# Pour décompresser un fichier .tar : 
+tar -xvf file.tar
+# Pour un fichier .tar.bz2 : 
+tar -xjf file.tar.bz2
+# Pour un fichier .gz :
+gzip -d monfichiercompressé.gz
+# Pour un fichier .zip : 
+sudo apt install unzip
+unzip -q monfichier.zip -d /path/to/directory
+
+# .tar = archivage, .gz = type de compression
+
