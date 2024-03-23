@@ -3,3 +3,4 @@ ncpa.cpl : Panneau de configuration\Réseau et Internet\Connexions réseau
 
 devmgmt.msc : Gestionnaire de périphériques
 
+regedit : Gestionnaire de registre
