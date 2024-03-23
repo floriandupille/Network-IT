@@ -1,0 +1,53 @@
+#Importe le modue active directory pour lancer AD cmdlets
+Import-Module activedirectory
+
+#Regarder les donnees dans le fichier CSV et remplacer par la variable $ADUsers
+$Users = Import-csv c:\UsersTest.csv -delimiter ";"
+
+#Parcourir chaque ligne contenant les details de l_utilisateur dans le fichier CSV  
+foreach ($User in $Users) {
+    # Lire les donnees utilisateur de chaque champ de chaque ligne
+   $Username       = $User.SamAccountName
+
+    # Verifiez si l_utilisateur existe deja dans AD
+    if (Get-ADUser -F {SamAccountName -eq $Username}) {
+         #Si l_utilisateur existe, donner un message d_avertissement
+         Write-Warning "Un compte d_utilisateur avec le nom d_utilisateur $Username existe deja dans Active Directory."
+    }
+    else {
+        # L_utilisateur n_existe pas, alors creez le nouveau compte d_utilisateur
+
+        # creer une table de hachage aggreger les parametres
+        $userProps = @{
+            SamAccountName             = $User.SamAccountName                   
+            Path                       = $User.path      
+            GivenName                  = $User.GivenName 
+            Surname                    = $User.Surname
+            Initials                   = $User.Initials
+            Name                       = $User.Name
+            DisplayName                = $User.DisplayName
+            UserPrincipalName          = $user.UserPrincipalName 
+            Department                 = $User.Department
+            Description                = $User.Description
+            Office                     = $User.Office
+            OfficePhone                = $User.OfficePhone
+            EmailAddress               = $User.EmailAddress
+            StreetAddress              = $User.StreetAddress
+            POBox                      = $User.POBox
+            City                       = $User.City
+            State                      = $User.State
+            PostalCode                 = $User.PostalCode
+            Title                      = $User.Title
+            Company                    = $User.Company
+            AccountPassword            = (ConvertTo-SecureString $User.password -AsPlainText -Force) 
+            Enabled                    = $true
+            ChangePasswordAtLogon      = $true
+        }   #end userprops   
+
+         New-ADUser @userProps
+         Write-Host "Le compte utilisateur $User a ete cree." -ForegroundColor Cyan
+   
+
+    } #end else
+   
+}

@@ -1,0 +1,19 @@
+# Importer le module Active Directory
+Import-Module ActiveDirectory
+
+# Lire le fichier CSV
+$csv = Import-Csv -Path "C:\OU.csv" -Delimiter ";"
+
+# Parcourir chaque ligne du fichier CSV
+foreach ($row in $csv) {
+    # Vérifier si l'OU existe déjà
+    $ou = Get-ADOrganizationalUnit -Filter {DistinguishedName -eq $row.Chemin} -ErrorAction SilentlyContinue
+
+    # Si l'OU n'existe pas, la créer
+    if ($ou -eq $null) {
+        New-ADOrganizationalUnit -Name $row.Nom -Path $row.Chemin -PassThru
+        Write-Host "OU $($row.Nom) a été créée."
+    } else {
+        Write-Host "OU $($row.Nom) existe déjà."
+    }
+}
