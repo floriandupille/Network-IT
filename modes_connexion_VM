@@ -1,0 +1,27 @@
+### VM Connexions Modes ###
+##
+#
+
+- NAT : 
+-- crée un réseau local virtuel et isolé du reste de vos machines physiques.
+-- intègre un serveur DHCP qui va attribuer une adresse IP à votre machine virtuelle.
+-- permet l'accès aux services Internet, mais pas aux services de votre machine virtuelle (RDP, site Web, etc...) à partir d'une autre machine de votre réseau local.
+
+- Bridged (Accès par pont) : 
+-- la carte réseau virtuelle est « pontée » à une carte réseau physique de l'hôte.
+-- la VM pourra contacter les autres machines connectées au réseau et elle pourra être contactée par les autres machines de ce réseau (utile pour un serveur web par exemple).
+
+- LAN Segment (Réseau interne) : 
+-- met en place un switch virtuel.
+-- communications possibles uniquement entre les machines virtuelles connectées.
+-- pas d'accès à Internet ni au réseau local.
+
+- Host-only : 
+-- similaire au réseau interne, mais permettant aussi une communication avec l’hôte (machine physique).
+-- les autres vm connectées à ce réseau peuvent communiquer entre elles.
+-- pas d'accès à Internet ni au réseau local.
+
+
+
+
+https://www.it-connect.fr/comprendre-les-differents-types-de-reseaux-de-vmware-workstation-pro/
