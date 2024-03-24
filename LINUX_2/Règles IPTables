@@ -1,0 +1,26 @@
+# En ENTRANT, accepte les requêtes HTTP et FTP
+
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 21 -j ACCEPT
+
+# En SORTANT, accepte les requêtes HTTP, HTTPS, DNS et FTP
+
+iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 53 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 21 -j ACCEPT
+
+# Les requêtes locales pour communication entre les paquets dans Linux sont acceptées
+
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# Accepte les requêtes entrantes SSH vers le serveur Linux
+
+iptables -A INPUT -p tcp --dport 22 -d 10.0.0.158 -j ACCEPT
+
+
+iptables -I INPUT -i ens192 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+iptables --policy INPUT DROP
+iptables --policy OUTPUT DROP (fais planter la connexion)

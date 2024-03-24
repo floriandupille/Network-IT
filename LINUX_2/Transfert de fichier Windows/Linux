@@ -1,0 +1,7 @@
+SCP - Machine locale à un serveur distant:
+SCP avec password
+scp "C:\Users\remib\source_du_fichier" root@192.168.1.169:/root
+
+
+SCP avec SSH Key
+scp -i "C:\Users\remib\.ssh\clefdeb01"  "C:\Users\remib\source_du_fichier" root@192.168.1.169:/root

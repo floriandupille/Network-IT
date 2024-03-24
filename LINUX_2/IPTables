@@ -1,0 +1,24 @@
+INPUT : 
+80 : http
+22 : ssh
+
+
+OUTPUT : 
+80/443 : http/hhtps
+53 : dns (sans quoi les demandes 80 ou 443 ne passeront pas)
+
+
+
+
+Sauvegarder IPTables : 
+
+sudo apt install iptables-persistent
+
+sudo netfilter-persistent save
+
+
+SINON
+sudo iptables-save > /etc/iptables/iptables.rules
+sudo iptables-restore < /etc/iptables/iptables.rules
+
+iptables -L -v -n

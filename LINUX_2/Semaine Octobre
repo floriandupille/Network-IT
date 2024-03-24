@@ -1,0 +1,523 @@
+Pré-requis semaine Administration Linux Avancée / Firewall
+Pas besoin du matériel réseau de la dernière semaine, seulement sur vos PC pour le moment avec le réseau WiFi du bâtiment.
+Commencer à réaliser les opérations suivantes dès 9h00 :
+Créer une VM Ubuntu Server 22.04 sur votre PC
+2 CPU, 2Go de RAM, 30Go HDD
+NIC Bridge ou NAT le temps d'installer l'OS
+ISO https://releases.ubuntu.com/22.04.3/ubuntu-22.04.3-live-server-amd64.iso
+
+Utilisateur : toor
+Mot de passe de l'utilisateur toor : toor
+
+Tester la connexion en SSH avec l'utilisateur toor depuis le CMD de votre PC
+
+Clone de la VM: une fois l'OS de la VM installée et update → réaliser un clone de la VM éteinte.
+
+Vous pouvez ensuite vous documenter sur le fonctionnement du service SSH et du service FTP sur Linux
+SSH service: https://doc.ubuntu-fr.org/ssh
+
+FTP service: https://doc.ubuntu-fr.org/vsftpd 
+Prerequisites week Advanced Linux Administration / Firewall
+No need for last week's network hardware, only on your PCs for the moment with the building's WiFi network.
+Start carrying out the following operations from 9:00 a.m.:
+Create an Ubuntu Server 22.04 VM on your PC
+2 CPU, 2GB RAM, 30GB HDD
+NIC Bridge or NAT while installing the OS
+ISO https://releases.ubuntu.com/22.04.3/ubuntu-22.04.3-live-server-amd64.iso
+
+User: toor
+Password of user toor: toor
+
+Test the SSH connection with the toor user from your PC's CMD
+
+Clone the VM: once the VM OS is installed and updated → create a clone of the powered-off VM.
+
+You can then read up on how the SSH service and FTP service work on Linux
+SSH service: https://doc.ubuntu-fr.org/ssh
+
+FTP service: https://doc.ubuntu-fr.org/vsftpd 
+rbrusse — Hier à 09:32
+https://gist.github.com/NSWG/2ad67111efb983c762e3425ff49ba2ad
+Gist
+VMware Workstation 16 Pro and Player keys
+VMware Workstation 16 Pro and Player keys. GitHub Gist: instantly share code, notes, and snippets.
+VMware Workstation 16 Pro and Player keys
+rbrusse — Hier à 10:15
+LAB - Mise en pré-prod d'un serveur Linux Ubuntu 22.04
+ETAPE 1 > Configurer une @IP static sur Ubuntu:
+Repérer la dénomination de votre NIC (Network Interface Card) avec la commande  ⚠️
+ip a
+
+La dénomination des interfaces réseaux Linux ressemble à ceci: 
+https://www.linuxtricks.fr/wiki/nomenclature-des-interfaces-reseau-sous-linux-enp0s3-wlo1
+
+Modifier le fichier de configuration "YAML" dans /etc/netplan/ pour assigner une @IP static à la VM
+Vous êtes sur Ubuntu, utilisez la commande sudo -i pour passer root
+
+netplan generate
+
+nano /etc/netplan/00-installer-config.yaml
+
+ # This is the network config written by 'subiquity'
+network:
+  ethernets:
+    ensXXX:
+      addresses: [192.168.1.150/24]
+      routes:
+       - to: 0.0.0.0/0
+         via: 192.168.1.1
+         metric: 3
+      nameservers:
+        addresses: [8.8.8.8, 8.8.4.4]
+      dhcp4: false
+      dhcp6: false
+  version: 2
+
+
+netplan apply
+
+Pour débug:
+netplan --debug apply
+
+Etape 1.1 > Vérifier les modifications réseau et réaliser des tests de connectivités
+ip a pour vérifier toujours, et ip route
+
+ping votre_paserelle
+
+ping google.com
+
+ETAPE 2.1 > Changer le nom d'hôte d'une VM Ubuntu
+hostnamectl hostname lenomdevotrechoix
+
+Lancer la commande hostnamectl pour observer la modification
+Vérifier si le nom de l'hôte correspond dans le fichier de configuration suivant:
+hostnamectl
+
+nano /etc/hostname
+nano /etc/hosts
+
+ETAPE 3 > Editer le fichier de source des paquets > sources.list suivant votre version:
+Vérifier la présence des sources des paquets >
+nano /etc/apt/sources.list
+
+Mettre à jour les sources des paquers APT
+ apt-get update
+
+Tester si vous pouvez rechercher netstat et l'installer
+apt search netstat
+
+apt-get install net-tools
+
+netstat -laputen
+
+
+___ 
+ETAPE 5 > Configurer l'heure de la VM en fonction de la TimeZone Europe/Paris
+sudo timedatectl set-timezone Europe/Paris
+
+Afficher la nouvelle configuration
+timedatectl
+
+__ 
+Réseau sans-fil salle MPT TSSR:
+SSID: SimplonInfra
+PSK: MerciSimplon
+
+__ 
+rbrusse — Hier à 11:20
+Follow me on Zoom
+https://us02web.zoom.us/j/2108423844?pwd=SGRQQy9Bb0JLeElTZVh0cHJIRXpPZz09
+Zoom Video
+Join our Cloud HD Video Meeting
+Zoom is the leader in modern enterprise video communications, with an easy, reliable cloud platform for video and audio conferencing, chat, and webinars across mobile, desktop, and room systems. Zoom Rooms is the original software-based conference room solution used around the world in board, conference, huddle, and training rooms, as well as ex...
+rbrusse — Hier à 13:49
+LAB - Allow SSH Users
+Trouver une solution pour n'autoriser que certains utilisateurs à se connecter en SSH.
+Disons titi et tata cette fois, mais pas toto.
+
+Pour tester, depuis votre PC avec PowerShell
+ssh titi@192.168.X.X
+
+Correction - interdire des utilisateurs sur SSH
+
+Trouver une solution pour n'autoriser que certains utilisateurs à se connecter en SSH. Disons titi et tata cette fois, mais pas toto.
+
+Créer un groupe qui permettra aux utilisateurs membre d'accéder au serveur en SSH. 
+
+addgroup authorized_ssh_group
+
+Ajouter les utilisateurs que l'on souhaite qui disposeront de permissions à SSH 
+
+usermod -a -G authorized_ssh_group titi
+usermod -a -G authorized_ssh_group tata
+
+Editer le fichier de configuration du service SSH: 
+nano /etc/ssh/sshd_config
+
+Ajouter la ligne suivante:
+ AllowGroups authorized_ssh_group
+
+Redémarrer le service SSH: 
+systemctl restart ssh
+
+Tester depuis le PC avec PowerShell 
+ssh titi@192.168.X.X
+
+Note: On pourrait à l'inverse de l'option Allow utiliser l'option Deny:
+
+DenyUsers les_users
+
+Ou encore 
+
+DenyGroups forbiden_ssh_group
+
+__ 
+rbrusse — Hier à 14:14
+LAB - Sudoers
+Faites en sorte que l'utilisateur titi puisse avoir des droits sudoers, par exemple qu'il puisse redémarrer des services...
+
+usermod -a -G sudo titi
+
+
+https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-fr
+___ 
+Comment modifier le fichier Sudoers  | DigitalOcean
+Sudo est une commande pratique qui vous permet d’exécuter des commandes avec des privilèges qui ne sont généralement pas de la portée de votre utilisateur. C…
+Image
+rbrusse — Hier à 14:26
+LAB FTP avec VSFTP
+https://www.digitalocean.com/community/tutorials/how-to-set-up-vsftpd-for-a-user-s-directory-on-ubuntu-20-04
+
+Correction
+Interdire aux utilisateurs de lire le répertoire home des autres utilisateurs
+dpkg-reconfigure adduser  > Passer à NO
+
+Ajout d'un utilisateur
+adduser sammy
+
+Install VSFTP
+apt-get update 
+apt-get install vsftpd
+
+Backup du fichier de config VSFTP par défaut
+cp /etc/vsftpd.conf /etc/vsftpd.conf.backup
+
+Création dossier parent CHROOT
+mkdir /home/sammy/ftp
+chown nobody:nogroup /home/sammy/ftp/
+
+La commande chmod a-w concerne toutes les catégories d’utilisateurs.
+chmod a-w /home/sammy/ftp
+
+Création dossier FTP CHROOT
+mkdir /home/sammy/ftp/files
+chown sammy:sammy /home/sammy/ftp/files
+
+Création fichier test
+echo "hello everyone" | tee /home/sammy/ftp/files/test.txt
+
+Paramétrage VSFTP
+nano /etc/vsftpd.conf
+
+listen=NO
+listen_ipv6=YES
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+dirmessage_enable=YES
+use_localtime=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+
+chroot_local_user=YES
+user_sub_token=$USER
+local_root=/home/$USER/ftp
+userlist_enable=YES
+userlist_file=/etc/vsftpd.userlist
+userlist_deny=NO
+secure_chroot_dir=/var/run/vsftpd/empty
+pam_service_name=vsftpd
+
+Ajout d'utilisateur à VSFTP
+Enfin, ajoutons notre utilisateur à /etc/vsftpd.userlist. 
+Utilisez l'option -a de la commande tee -a pour ajouter au fichier :
+
+echo "sammy" | tee -a /etc/vsftpd.userlist
+
+Redémarrage du service
+systemctl restart vsftpd
+
+Débug du service VSFTP
+systemctl status vsftpd
+
+tail -f /var/log/syslog
+
+__ 
+How To Set Up vsftpd for a User's Directory on Ubuntu 20.04  | Digi...
+FTP, which is short for File Transfer Protocol, is a network protocol that was once widely used for moving files between a client and server. vsftpd, very se…
+Image
+rbrusse — Hier à 16:31
+Terminal Windows
+https://www.microsoft.com/store/productid/9N0DX20HK701?ocid=pdpshare
+
+PowerShell
+https://www.microsoft.com/store/productid/9MZ1SNWT0N5D?ocid=pdpshare 
+rbrusse — Hier à 17:06
+Récap de la journée
+SSH Secure Shell - :22
+administrer des ressources à distance (switch - server Linux)
+SSH permet de chiffrer les échanges entre le client et le serveur
+
+SCP Secure Copy Protocol - :22
+Copie de fichiers ou dossiers en CLI (commande complexe)
+GUI possible avec WinSCP
+
+FTP File Transfert Protocol - :20 et :21
+Pour les développeurs > serveur web SaaS de type Hostinger, 1and1, OVH, Wordpress hébergé...
+Pour le transfert du fichier volumineux
+Pour les EDI Echange de Données Informatiques entre des ERP ou CRM d'une entité et son fournisseur
+
+TFP Trivial File Transfert Protocol - :69
+TFTP reste très utilisé pour la mise à jour des logiciels embarqués sur les équipements réseaux (routeurs, pare-feu, etc.) ou pour démarrer un PC à partir d'une carte réseau.
+
+__
+https://ipcisco.com/lesson/tftp-ftp-sftp-and-scp/ 
+Image
+Image
+rbrusse — Hier à 17:21
+Pluggable Authentication Modules (PAM)
+Pluggable Authentication Modules (modules d’authentification enfichables, en abrégé PAM) est un mécanisme permettant d’intégrer différents schémas d’authentification de bas niveau dans une API de haut niveau, permettant de ce fait de rendre indépendants du schéma les logiciels réclamant une authentification.
+Image
+SSH - Secure Shell
+https://www.hostinger.fr/tutoriels/ssh-linux
+https://www.it-connect.fr/chapitres/quest-ce-que-ssh/
+Hostinger Tutoriels
+Qu'est ce que SSH ? Tout ce qu'il Faut Savoir [2023]
+Vous voulez en savoir plus sur le fonctionnement du SSH ? Nous vous montrons tout ce qu'il faut savoir dans ce petit tutoriel !
+Qu'est ce que SSH ? Tout ce qu'il Faut Savoir [2023]
+IT-Connect
+Qu'est-ce que SSH ? | IT-Connect
+SSH signifie "Secure Shell", il s'agit donc d'un "shell" dit "sécurisé"
+Image
+rbrusse — Hier à 18:24
+[Rappel] Permissions Linux - chmod
+chmod est la commande qui permet de changer les permissions des fichiers et des dossiers.
+
+Voici sa syntaxe :
+chmod [option] permission fichier
+où les permissions peuvent être notées en octal :
+chmod 777 fichier
+
+Ou en mode symbolique selon la syntaxe en utilisant :
+les catégories d’utilisateur : u, g, o et a (all)
+des opérateurs d’ajout/suppression : =, + et -
+des droits : r, w et/ou x
+
+chmod u+rwx,g+rwx,o+rwx
+
+https://chmod-calculator.com/
+
+__ 
+Image
+Image
+Image
+Image
+rbrusse — Hier à 18:45
+Être un dieu des droits Linux
+Pour ceux qui ont envie de comprendre le fonctionnement des utilisateurs, des groupes sous Linux, j'ai moi même appris avec ce site il y a des années:
+
+https://fr.m.wikibooks.org/wiki/Le_système_d'exploitation_GNU-Linux/Les_utilisateurs_et_groupes
+
+Également un de mes favoris pour les droits et les permissions sous Linux.
+
+https://www.leshirondellesdunet.com/chmod-et-chown 
+Le système d'exploitation GNU-Linux/Les utilisateurs et groupes
+Les Hirondelles du Net
+Chmod et Chown, les droits sous GNU/Linux - Les Hirondelles du Net
+Un tutoriel simple avec des exemples pratiques sur des fichiers et répertoires sous GNU/Linux.
+Image
+rbrusse — Aujourd’hui à 09:05
+LAB Bruteforce SSH
+Avant de télécharger un paquet, j'update les sources:
+apt-get update
+
+Installation du logiciel Hydra
+apt-get install hydra
+
+Télécharger un dictionnaire de mot de passe dans le dossier de l'utilisateur /root
+cd /root
+pwd
+wget https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
+
+Pour voir que le dictionnaire est bien dans le dossier de /root
+ls -l
+Manuel Hydra
+hydra
+
+Commande Hydra permettant de lancer un scan bruteforce en SSH. (attaquer l'un de vos binômes)
+hydra -V -f -t 4 -l toor -P /root/rockyou.txt ssh://192.168.X.X:22
+
+__ 
+Image
+Par ici:
+
+https://us02web.zoom.us/j/2108423844?pwd=SGRQQy9Bb0JLeElTZVh0cHJIRXpPZz09
+Zoom Video
+Join our Cloud HD Video Meeting
+Zoom is the leader in modern enterprise video communications, with an easy, reliable cloud platform for video and audio conferencing, chat, and webinars across mobile, desktop, and room systems. Zoom Rooms is the original software-based conference room solution used around the world in board, conference, huddle, and training rooms, as well as ex...
+rbrusse — Aujourd’hui à 09:29
+Pour observer les logs SSH:
+Pour afficher les logs et observer que quelqu'un vous attaque en brute force
+apt-get install ccze
+
+tail -f /var/log/auth.log | ccze
+
+__ 
+rbrusse — Aujourd’hui à 10:35
+[Updated] Configuration d'une clef SSH pour les serveurs Ubuntu/Debian (GNU/Linux)
+Sur la VM Linux, se placer dans le répertoire SSH de l'utilisateur
+cd /home/titi/.ssh
+
+Si le répertoire n'existe pas
+mkdir /home/titi/.ssh
+cd /home/titi/.ssh
+
+Générer une clef SSH, garder le path et le nom par défaut id_rsa
+ssh-keygen
+
+Ensuite, ajoutez la clé publique au fichier authorized_keys en saisissant ce qui suit :
+cat /home/titi/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+Appliquer une permissions sur le dossier 700
+chmod -R 700 /home/titi/.ssh/ 
+
+Sur votre poste Windows, importer la clef privée avec SCP dans votre dossier utilisateur Windows:
+scp titi@10.0.X.X:/home/titi/.ssh/id_rsa "C:\Users\votre_user_windows\.ssh\titikey"
+
+(Adapter IP et Path aux besoins)
+
+Configuration SSH-Server
+Une fois la clef privé importé sur votre machine Windows, il va falloir aller modifier le fonctionnement du service SSH sur la VM Linux:
+nano /etc/ssh/sshd_config -c
+
+Désactiver l'authentification par mot de passe et n'accepter que l'authentification par certificat
+Commenter ou Dé-Commenter les lignes suivantes et changer les valeurs:
+# Include /etc/ssh/sshd_config.d/*.conf
+PermitRootLogin without-password
+PasswordAuthentication no
+PubkeyAuthentication yes
+ChallengeResponseAuthentication no
+
+Redémarrer le service SSH
+systemctl restart ssh
+
+Pour se connecter depuis Windows Terminal:
+ssh -i "C:\Users\votre_user_windows\.ssh\titikey" titi@10.0.0.XXX
+
+
+___ 
+Image
+rbrusse — Aujourd’hui à 11:26
+New Terminal Windows + New PowerShell 
+rbrusse — Aujourd’hui à 12:40
+Comment procéder pour connaître sa distribution Linux
+cat /etc/*release
+
+__ 
+rbrusse — Aujourd’hui à 14:05
+Solution backup RSYNC  - (à perfectionner)
+https://www.wundertech.net/how-to-backup-a-linux-pc-to-a-synology-nas-using-rsync/
+
+Installer rsync
+apt-get install rsync
+
+Commande permettant de copier les données du Linux à destination du NAS
+Pour sauvegarder avec rsync:
+rsync -avx /home/titi/* admin@192.168.XXX.XXX:/volume1/NetBackup/
+
+Pour restaurer avec rsync:
+rsync -avx admin@IP_du_NAS :/Volume1/NetBackup/ /home/destination_de_la_restauration/
+
+Pour ceux qui souhaitent perfectionner la solution de backup avec une clef SSH pour l'authentification rsync à la place du mot de passe 😉
+https://www.wundertech.net/use-ssh-keys-to-automatically-backup-a-linux-pc-to-a-synology-nas/
+
+Pour obliger rsync à utiliser la clef SSH de l'admin du NAS
+rsync -e ssh -ax /chemin/source admin@192.168.X.X:/volume1/NetBackup
+
+__ 
+WunderTech
+How to Use Rsync on a Synology NAS
+In this tutorial, we will look at how to use Rsync on a Synology NAS. https://youtu.be/wSGaG3AQV7o Rsync is a tool that can be used to sync files from one location to another. This tutorial will
+How to Use Rsync on a Synology NAS
+WunderTech
+Use SSH Keys to Automatically Backup a Linux PC to a Synology NAS!
+Today we are going to look at how you can use SSH keys and Cron to automatically back up a Linux PC to a Synology NAS. https://youtu.be/kvK3S3Wsx2M The process will allow you to automatically authenticate
+Use SSH Keys to Automatically Backup a Linux PC to a Synology NAS!
+rbrusse — Aujourd’hui à 14:42
+Upgrade d'une seule application GNU/Linux
+sudo apt-get install --only-upgrade openssh-server
+
+__ 
+rbrusse — Aujourd’hui à 15:03
+Créer une exception pour permettre à un user de se connecter avec un  mot de passe
+Après vous être assuré que tous vos users ne peuvent se connecter que via une clé ssh, retournez dans votre fichier sshd_config
+
+sudo nano /etc/ssh/sshd_config -c
+
+Ajoutez en fin de fichier les paramètres suivants : 
+
+Match User nom_du_user
+PasswordAuthentication yes
+Match all
+
+Enregistrez puis redémarrez le ssh : 
+
+systemctl restart ssh
+
+Vous pouvez maintenant tester de vous connecter par mot de passe avec votre compte exclu. 
+rbrusse — Aujourd’hui à 16:06
+NAS Info
+http://10.0.0.100/
+
+Login: NAS
+Pwd: Junki123
+rbrusse — Aujourd’hui à 16:27
+RSYNC
+rsync (pour remote synchronization ou synchronisation à distance), est un logiciel de synchronisation de fichiers. Il est fréquemment utilisé pour mettre en place des systèmes de sauvegarde distante ou des points de restauration du système.
+
+rsync travaille de manière unidirectionnelle c'est-à-dire qu'il synchronise, copie ou actualise les données d'une source (locale ou distante) vers une destination (locale ou distante) en ne transférant que les octets des fichiers qui ont été modifiés.
+
+https://www.hostinger.fr/tutoriels/commande-rsync-linux
+
+__ 
+Image
+rbrusse — Aujourd’hui à 18:33
+Créer un bannière d'avertissement SSH
+Les avertissements de bannière SSH sont nécessaires lorsque les entreprises ou les organisations souhaitent afficher un avertissement sévère pour décourager les parties non autorisées d'accéder à un serveur.
+
+Ces avertissements sont affichés juste avant l'invite du mot de passe afin que les utilisateurs non autorisés qui sont sur le point de se connecter soient informés des conséquences d'une telle connexion. En règle générale, ces avertissements constituent des conséquences juridiques que les utilisateurs non autorisés peuvent subir s'ils décident de procéder à l'accès au serveur.
+
+Ajouter dans le fichier le config du serveur SSH la ligne suivante
+Banner /etc/ssh/banniere_ssh
+
+Créer un fichier texte de bannière SSH avec des avertissements
+nano /etc/ssh/banniere_ssh
+
+L
+    __ __    ______    ______    ____           ____    __  __  ______
+   / //_/   / ____/   / ____/   / __ \         / __ \  / / / / /_  __/
+  / ,<     / __/     / __/     / /_/ /        / / / / / / / /   / /   
+ / /| |   / /___    / /___    / ____/        / /_/ / / /_/ /   / /    
+/_/ |_|  /_____/   /_____/   /_/             \____/  \____/   /_/     
+                                                                                                                             
+
+
+Vous pouvez générer une bannière en ASCII avec ce site
+https://manytools.org/hacker-tools/ascii-banner/
+
+Redémarrer le service SSH et connectez-vous en SSH pour observer votre œuvre !
+__ 
+Image
+Manytools.org - Your online toolshed
+Create ASCII text banners online
+Image

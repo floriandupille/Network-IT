@@ -1,0 +1,15 @@
+
+laputen
+thispasswordisveryweak
+
+
+DOCKER : plex (streaming)
+pi-hole, adguard (=adblock)
+
+
+
+script bash : 
+
+
+read -p "entrez la valeur désirée" nom_de_la_variable
+= enregistrer une info sur une variable à utiliser dans le script

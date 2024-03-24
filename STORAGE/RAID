@@ -1,0 +1,77 @@
+#######################################################################################
+### RAID ###
+##
+#
+# Les contrôleurs RAID sont des hardware ou des software utilisés pour gérer les disques dans les NAS afin qu’ils fonctionnent tous comme une unité. 
+# RAID, qui signifie réseau redondant de disques indépendants, permet aux utilisateurs d’utiliser plusieurs disques durs pour stocker des données et les protéger contre les défaillances des disques.
+# Le RAID ne sert pas de solution de back-up, il s'agit d'assurer une tolérance de panne.
+#
+##
+
+## RAID 0 ##
+#
++ Rassemble les disques en un seul volume de stockage
++ Vitesse de stockage, préféré pour les performances
+- La défaillance d'un seul disque peut causer la perte de toutes les
+données (un seul fichier peut être divisé dans plusieurs disques à la fois) 
+- La capacité de chaque disque se limite à la taille du plus petit disque (perte d'espace si les disques ne correspondent pas)
+
+## RAID 1 ##
+#
+= Tolérance +
++ Les données d'un disque sont dupliquées dans le second (sauvegarde miroir)
++ Permet de continuer à travailler sans interruption en cas de défaillance d'un disque
+- La suppression d'un fichier sur un disque le supprimera de l'autre
+- Demande davantage de ressources (nombre de disques doublé pour le même espace de stockage)
+
+## RAID 5 ##
+# 
+= Tolérance + Read/Write +
++ Un volume retranché est utilisé comme parité divisée sur l'ensemble des disques (Premier volume : A1, A2, A3, Ap) pour reconstruire une partition de disque en cas de défaillance
++ Le système continue de fonctionner en performances amoindries le temps de remplacer le disque perdu
++ Perte d'espace de stockage moindre comparé au RAID 1 (Sur un ensemble de 4 disques de 1 To, 1 seul est perdu)
+- Nécessite au moins 3 disques (pas de limite) pour fonctionner
+- Tolérance 1 disque : si 2 disques tombent en panne, l'on perd l'ensemble des données
+
+## RAID 6 ##
+# 
+= Tolérance ++ Read/Write +
++ Deux blocs de parités par volume au lieu d'un : certaines partitions peuvent être supportés par 2 disques pour reconstruire l'image perdue
++ Autorise deux disques défaillants en même temps, accordant plus de temps pour remplacer les disques perdus
+- Nécessite au moins 4 disques pour fonctionner
+- Tolérances 2 disques : à partir de 3 disques perdus, l'on perd l'ensemble des données
+
+
+## RAID 10 ##
+# RAID 1 + 0 : Deux RAID 1 combinés dans un RAID 0
+= Tolérance + Read/Write ++
++ Gain de performance (ex : pour travailler sur des fichiers temporaires)
++ Deux disques en miroir pour sécuriser les données
+- Nécessite au moins 4 disques
+
+## RAID 15 ##
+# RAID 1 + 5 : Au moins trois RAID 1 combinés dans un RAID 5
++ Haute fiabilité car nécessite que deux grappes de disques cessent de fonctionner pour être mis en défaut (la défaillance d'un disque cause la redondance sur son disque miroir, puis si le disque miroir est perdu le RAID 5 copie la grappe perdue sur le bloc de parité)
+- Au minimum 6 disques de stockage
+
+## RAID 50 ##
+# RAID 5 + 0 : Deux RAID 5 combinés dans un RAID 0
+Au minimum 6 disques
+
+## RAID 51 ##
+# RAID 5 + 1 : Deux RAID 5 combinés dans un RAID 1
+Au minimum 6 disques
+
+Le choix du RAID dans un NAS n'est pas crucial car il peut être modifié.
+
+Autre option :
+
+## JBOD ##
+# Just a Bunch Of Disks : semblable au RAID 0 à quelques différences près
++ Les données des disques ne se mélangent pas, la perte d'un disque ne causera donc que la perte des fichiers spécifiquement sauvegardé sur le disque
+- Moins de performances comparé au RAID 0
+
+
+
+AVANTAGE DU RAID LOGICIEL SUR LE RAID MATERIEL : 
++ Pas besoin de redémarrer le serveur : le logiciel peut juste expulser le disque défaillant et ajouter le nouveau disque sans s'interrompre 

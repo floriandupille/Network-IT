@@ -1,0 +1,21 @@
+DAS : Direct Attached Storage
+- connexion directe sur une machine unique (et non le réseau)
+- pas d'OS
+- connexion en eSATA, SAS ou USB-C
+- compatible RAID (contrairement à un simple disque dur externe)
+
+NAS : Network Attached Storage
+- plus récent
+- une seule interface réseau (local)
+- capacités limitées (8 disques max ?)
+- connexion via réseau (RJ45, fibre)
+- communication par protocoles NFS, SMB, AFP (macOS)
+
+SAN : Storage Area Network
+- plus ancien
+- plusieurs interface réseaux (partagé entre plusieurs serveurs 
+simultanément)
+- peut être visualisé comme stockage local sur le serveur
+- connexion via réseau (RJ45, fibre)
+- communication par protocoles iSCSI ou Fiber Channel
+- 

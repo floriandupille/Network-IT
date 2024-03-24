@@ -1,0 +1,54 @@
+Apache2 - VHOST
+Que ce soit pour la configuration des sites et options d'Apache2, les fichiers de configurations se situe dans ce répertoire:
+/etc/apache2/
+
+sites-available = site(s) disponible(s) non publié(s) par le serveur web, non accessible(s)
+sites-enabled = site(s) actif(s) publié(s) par le serveur web, accessible (s)
+
+Le serveur web ne rendra pas accessible votre site indique tant que le fichier de sitexx.conf n'est pas lié avec la commande a2ensite dans sites-enabled
+
+Seul le site par défaut → default.conf est actif et accessible lors de l'installation d'Apache ou Nginx
+
+Doc VHOST Apache2: https://httpd.apache.org/docs/2.4/fr/vhosts/examples.html
+Concept Apache2: https://doc.ubuntu-fr.org/apache2
+[10:27]
+Créer un serveur web avec Apache2
+Passer root
+sudo -i
+
+Pour ce LAB nous avons besoin des paquets Git et du server Web NGINX
+Installer Git et Apache2
+apt-get update
+
+apt-get install apache2
+
+apt-get install git
+
+Aller voir le site par défaut d'Apache2
+Renseigner l'IP de votre VM dans votre navigateur pour observer le site par défaut
+
+Vous pouvez aussi observer avec Netstat, l'écoute du serveur Apache2 sur le port :80
+
+netstat -laputen
+
+Supprimer le contenu de votre code qui n'est plus à jour
+rm -R /var/www/html/*
+
+Importer votre nouveau code à jour avec Git Clone
+Se placer dans le home de l'utilisateur root
+cd /root
+
+Cloner votre dépôt
+git clone https://github.com/AndreiaPena/POKEDEX
+
+Vérifier que l'importation à réussi
+ls -al
+
+Se placer dans le répertoire du projet Git
+cd POKEDEX
+
+Déplacer votre code dans le répertoire du serveur web Apache2
+mv * /var/www/html
+
+En renseignant votre nom de domaine ou l'IP Public de l'instance dans votre navigateur, TADAH vous devez voir votre Pokedex !!!
+
